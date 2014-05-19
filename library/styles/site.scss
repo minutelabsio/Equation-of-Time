@@ -1,0 +1,19 @@
+// site styles
+// @import 'compass/css3';
+@import '_vars';
+
+html, body, #wrap-outer {
+    height: 100%;
+}
+
+#viewport {
+    padding: 4em 0;
+}
+
+#stellar-solar-sim {
+    background: $deep-grey-dark;
+    border: 1px solid $deep-grey-dark;
+    margin: auto;
+    width: 600px;
+    height: 600px;
+}
