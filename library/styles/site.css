@@ -10,7 +10,8 @@ html, body, #wrap-outer {
 
 /* line 13, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #stellar-solar-sim {
-  background: #1a1a1a;
+  background: #1a1a1a url('../images/sky.png?1395448799');
+  background-size: 200%;
   border: 1px solid #1a1a1a;
   margin: auto;
   width: 600px;

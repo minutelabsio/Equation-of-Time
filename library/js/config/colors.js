@@ -5,14 +5,11 @@ define({
 
     ,'deepGrey': 'rgb(67, 67, 67)'
     ,'deepGreyLight': 'rgb(98, 98, 98)'
+    ,'deepGreyDark': 'rgb(26, 26, 26)'
 
     ,'blue': 'rgb(40, 136, 228)'
     ,'blueLight': 'rgb(91, 191, 243)'
     ,'blueDark': 'rgb(18, 84, 151)'
-
-    ,'blueGlass': 'rgb(221, 249, 255)'
-
-    ,'blueFire': '#626ead'
 
     ,'green': 'rgb(121, 229, 0)'
     ,'greenLight': 'rgb(125, 242, 129)'

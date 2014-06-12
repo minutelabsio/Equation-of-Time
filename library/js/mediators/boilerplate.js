@@ -37,6 +37,8 @@ define([
             var self = this;
 
             this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
+            this.sims.stellarSolar.sunAngle( 190 );
+            this.sims.stellarSolar.stage.draw();
         }
 
     }, ['events']);
