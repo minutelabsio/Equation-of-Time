@@ -24,10 +24,6 @@ define([
         constructor: function( el ){
 
             var self = this;
-            self.initEvents();
-
-            self.daysPerYear = 6;
-
             self.$el = $( el );
             var stage = new Kinetic.Stage({
                 container: self.$el[0]
@@ -35,10 +31,19 @@ define([
                 ,height: self.$el.height()
             });
 
+            self.stage = stage;
+
             function dim( r ){
                 return r/600*self.$el.width();
             }
 
+            // vars
+            self.animSpeed = 1;
+            self.daysPerYear = 6;
+            self.day = 0;
+            self.earthDist = dim(200);
+
+            // init simulation
             var layer = new Kinetic.Layer();
             var r = 60;
             var earth = new Kinetic.Group({
@@ -66,7 +71,7 @@ define([
                 earth.add(earthImg);
 
                 stage.draw();
-                self.initAnim();
+                self.resolve('ready');
             };
             imageObj.src = earthAbove;
 
@@ -128,6 +133,8 @@ define([
                 ,fill: colors.yellowLight
             });
 
+            self.sun = sun;
+
             var sunCorona = new Kinetic.Circle({
                 x: dim(300)
                 ,y: dim(300)
@@ -145,43 +152,67 @@ define([
             stage.add(layer);
 
             self.layer = layer;
-            self.stage = stage;
+
+            self.initEvents();
+            self.initAnim();
         }
 
         ,initAnim: function(){
+
             var self = this;
-            var earth = this.earth;
-            var w = 0.3;
-            var r = 200;
-            var ang = 0;
-            var rot = 0;
 
-            var anim = new Kinetic.Animation(function(frame) {
+            self.anim = new Kinetic.Animation(function(frame) {
                 var t = (frame.timeDiff / 1000);
-                ang += w * t;
-                rot += w * self.daysPerYear * t;
-                ang %= Pi2;
-                rot %= Pi2;
-                earth.offsetX( -r * Math.cos(-ang) );
-                earth.offsetY( -r * Math.sin(-ang) );
-                self.sunAngle( ang*deg );
-                self.stellarAngle( rot*deg );
+                var w = self.animSpeed * 0.3;
+                self.setDay( self.day + t * w );
             }, this.layer);
-
-            anim.start();
         }
 
+        ,start: function(){
+
+            this.anim.start();
+        }
+
+        ,stop: function(){
+
+            this.anim.stop();
+        }
+
+        // set the day to change the position of the simulation
+        ,setDay: function( d ){
+            var self = this
+                ,ang // year angle
+                ,rot // day angle
+                ,earth = self.earth
+                ,r = self.earthDist
+                ;
+            // automatically cycle the days
+            self.day = d % self.daysPerYear;
+            rot = Pi2 * self.day;
+            ang = rot / self.daysPerYear;
+
+            earth.offsetX( -r * Math.cos(-ang) );
+            earth.offsetY( -r * Math.sin(-ang) );
+            self.sunAngle( ang );
+            self.stellarAngle( rot );
+            self.updateDiff();
+        }
+
+        // in radians
         ,sunAngle: function( angle ){
 
-            this.sunAng = angle;
-            this.updateDiff();
+            angle %= Pi2;
+            this.sunAng = angle * deg;
         }
 
+        // in radians
         ,stellarAngle: function( angle ){
 
+            angle %= Pi2;
+            // convert
+            angle *= deg;
             this.wedgeStellar.setAngle( angle );
             this.earthImg.rotation( 90-angle );
-            this.updateDiff();
         }
 
         ,updateDiff: function(){
@@ -189,18 +220,39 @@ define([
             this.wedgeDiff.rotation( 180-a );
             this.wedgeDiff.setAngle( this.wedgeStellar.getAngle() - a );
             this.solarNoon.rotation( -a );
-
         }
 
         // Initialize events
         ,initEvents: function(){
 
-            var self = this;
+            var self = this
+                ,drag = false
+                ;
+
+            self.earth.on('mousedown touchstart', function( e ){
+                // stop the anim
+                self.stop();
+                drag = true;
+            });
+            self.stage.on('contentMousemove contentTouchmove', function( e ){
+
+                if ( drag ){
+                    var x = e.evt.layerX - self.sun.x()
+                        ,y = e.evt.layerY - self.sun.y()
+                        ,ang = Math.atan2( -y, x )
+                        ;
+
+                    self.setDay( ang * self.daysPerYear / Pi2 );
+                    self.layer.draw();
+                }
+            });
+            self.stage.on('contentMouseup contentTouchend', function( e ){
+                self.start();
+                drag = false;
+            });
         }
 
     }, ['events']);
 
-    return function( el ){
-        return new Module( el );
-    };
+    return Module;
 });
