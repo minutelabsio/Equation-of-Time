@@ -147,18 +147,19 @@ define([
 
         ,start: function(){
 
-            // this.anim.start();
+            this.anim.start();
         }
 
         ,stop: function(){
 
-            // this.anim.stop();
+            this.anim.stop();
         }
 
         // set the day to change the position of the simulation
         ,setDay: function( d ){
             var self = this
                 ,E // eccentric anomoly
+                ,meanAng
                 ,e = self.e // eccentricity
                 ,rot // day angle
                 ,earth = self.earth
@@ -169,11 +170,12 @@ define([
             // automatically cycle the days
             self.day = d % self.daysPerYear;
             rot = Pi2 * self.day;
-            E = -rot / self.daysPerYear;
+            meanAng = -rot / self.daysPerYear;
+            E = meanAng + e * Math.sin( meanAng ) / ( 1 + e * Math.cos( meanAng ) );
 
             earth.offsetX( -a * (Math.cos(E) - e) );
             earth.offsetY( -b * Math.sin(E) );
-            self.sunAngle( -E );
+            self.sunAngle( -meanAng );
             self.stellarAngle( rot );
             self.recalc();
         }
