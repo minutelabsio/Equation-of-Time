@@ -45,6 +45,7 @@ define([
 
             // init simulation
             var layer = new Kinetic.Layer();
+            var bgLayer = new Kinetic.Layer();
             var r = 55;
             var earth = new Kinetic.Group({
                 x: dim( 300 )
@@ -116,7 +117,7 @@ define([
                 ,draggable: true
                 ,dragBoundFunc: function( pos ){
                     pos.y = this.getAbsolutePosition().y;
-                    pos.x = Math.min(Math.max( 0, pos.x ), 100);
+                    pos.x = Math.min(Math.max( 0, pos.x ), dim(100));
                     return pos;
                 }
             });
@@ -140,6 +141,14 @@ define([
 
             self.sun.add( sunCircle );
             self.sun.add( sunCorona );
+            self.sun.add( new Kinetic.Circle({
+                x: 0
+                ,y: dim( 50 )
+                ,radius: 5
+                ,fill: colors.blue
+                ,stroke: colors.greyDark
+                ,strokeWidth: 2
+            }));
 
             self.orbitLine = new Kinetic.Ellipse({
                 radius: {
@@ -153,14 +162,51 @@ define([
                 ,dash: [5,5]
             });
 
-            layer.add(self.orbitLine);
+            var sunGuides = new Kinetic.Group({
+                x: dim( 300 )
+                ,y: dim( 350 )
+            });
 
+            var eccLine = new Kinetic.Line({
+                points: [ 0, 0, dim(100), 0 ]
+                ,stroke: colors.greyDark
+                ,strokeWidth: 2
+                ,dash: [ 5, 5 ]
+            });
+
+            sunGuides.add( eccLine );
+            sunGuides.add( new Kinetic.Line({
+                points: [ 0, -8, 0, 8 ]
+                ,stroke: colors.greyDark
+                ,strokeWidth: 4
+            }));
+            sunGuides.add( new Kinetic.Line({
+                points: [ dim(100), -8, dim(100), 8 ]
+                ,stroke: colors.greyDark
+                ,strokeWidth: 4
+            }));
+            sunGuides.add( new Kinetic.Text({
+                text: 'Drag the Sun to change the orbit'
+                ,x: -200
+                ,y: dim(180)
+                ,width: 400
+                ,stroke: colors.greyDark
+                ,strokeWidth: 1
+                ,fontFamily: '"latin-modern-mono-light", Courier, monospace'
+                ,fontSize: 18
+                ,align: 'center'
+            }));
+
+            bgLayer.add(self.orbitLine);
+            bgLayer.add(sunGuides);
+            layer.add(self.sun);
             layer.add(earth);
 
-            layer.add(self.sun);
+            stage.add(bgLayer);
             stage.add(layer);
 
             self.layer = layer;
+            self.bgLayer = bgLayer;
 
             self.setEccentricity( 0.1 );
             self.initEvents();
@@ -203,12 +249,13 @@ define([
                 ,b = self.minorAxis
                 ,a = self.majorAxis
                 ;
+
             // automatically cycle the days
             self.day = d % self.daysPerYear;
             rot = Pi2 * self.day;
             meanAng = -rot / self.daysPerYear;
             E = meanAng + e * Math.sin( meanAng ) / ( 1 - e * Math.cos( meanAng ) );
-            
+
             earth.offsetX( -a * (Math.cos(E) ) );
             earth.offsetY( -b * Math.sin(E) );
             self.sunAngle( -meanAng );
@@ -224,6 +271,7 @@ define([
             this.orbitLine.radiusX( this.majorAxis );
             this.orbitLine.radiusY( this.minorAxis );
             this.layer.draw();
+            this.bgLayer.draw();
         }
 
         // in radians
@@ -282,9 +330,12 @@ define([
                 if ( drag ){
                     var x = e.evt.layerX + self.sun.offsetX()
                         ,y = e.evt.layerY + self.sun.offsetY()
-                        ,ang = Math.atan2( -y, x )
+                        ,e = self.e // eccentricity
+                        ,b = self.minorAxis
+                        ,a = self.majorAxis
+                        ,ang = Math.atan2( -y * a / b, x )
                         ;
-
+                    ang -= e * Math.sin( ang );
                     self.setDay( ang * self.daysPerYear / Pi2 );
                     self.layer.draw();
                 }
