@@ -106,18 +106,31 @@ define([
 
             earth.add( this.eotWedge );
 
-            var sun = new Kinetic.Circle({
-                x: dim(300)
-                ,y: dim(300)
+            self.sun = new Kinetic.Group({
+                x: 0
+                ,y: 0
+                ,offset: {
+                    x: -dim( 300 )
+                    ,y: -dim( 300 )
+                }
+                ,draggable: true
+                ,dragBoundFunc: function( pos ){
+                    pos.y = this.getAbsolutePosition().y;
+                    pos.x = Math.min(Math.max( 0, pos.x ), 100);
+                    return pos;
+                }
+            });
+
+            var sunCircle = new Kinetic.Circle({
+                x: 0
+                ,y: 0
                 ,radius: dim(30)
                 ,fill: colors.yellowLight
             });
 
-            self.sun = sun;
-
             var sunCorona = new Kinetic.Circle({
-                x: dim(300)
-                ,y: dim(300)
+                x: 0
+                ,y: 0
                 ,radius: dim(45)
                 // ,fillRadialGradientStartPoint: { x: 0, y: 0 }
                 ,fillRadialGradientStartRadius: dim(30)
@@ -125,12 +138,26 @@ define([
                 ,fillRadialGradientColorStops: [0, colors.yellow, 1, 'rgba(0,0,0,0)']
             });
 
-            self.sunCorona = sunCorona;
+            self.sun.add( sunCircle );
+            self.sun.add( sunCorona );
+
+            self.orbitLine = new Kinetic.Ellipse({
+                radius: {
+                    x: 1
+                    ,y: 1
+                }
+                ,x: dim( 300 )
+                ,y: dim( 300 )
+                ,stroke: colors.grey
+                ,strokeWidth: 2
+                ,dash: [5,5]
+            });
+
+            layer.add(self.orbitLine);
 
             layer.add(earth);
 
-            layer.add(sunCorona);
-            layer.add(sun);
+            layer.add(self.sun);
             stage.add(layer);
 
             self.layer = layer;
@@ -176,14 +203,13 @@ define([
                 ,b = self.minorAxis
                 ,a = self.majorAxis
                 ;
-
             // automatically cycle the days
             self.day = d % self.daysPerYear;
             rot = Pi2 * self.day;
             meanAng = -rot / self.daysPerYear;
-            E = meanAng + e * Math.sin( meanAng ) / ( 1 + e * Math.cos( meanAng ) );
-
-            earth.offsetX( -a * (Math.cos(E) - e) );
+            E = meanAng + e * Math.sin( meanAng ) / ( 1 - e * Math.cos( meanAng ) );
+            
+            earth.offsetX( -a * (Math.cos(E) ) );
             earth.offsetY( -b * Math.sin(E) );
             self.sunAngle( -meanAng );
             self.stellarAngle( rot );
@@ -194,8 +220,9 @@ define([
             this.e = e;
             this.majorAxis = this.minorAxis / Math.sqrt(1 - e*e);
 
-            this.sun.offsetX( -this.majorAxis * e );
-            this.sunCorona.offsetX( -this.majorAxis * e );
+            this.sun.x( this.majorAxis * e );
+            this.orbitLine.radiusX( this.majorAxis );
+            this.orbitLine.radiusY( this.minorAxis );
             this.layer.draw();
         }
 
@@ -226,8 +253,8 @@ define([
 
             this.meanSolarNoon.rotation( -a );
 
-            x -= sun.offsetX();
-            y -= sun.offsetY();
+            x += sun.x();
+            y += sun.y();
 
             this.trueSolarNoon.rotation( Math.atan2( -y, -x ) * deg );
 
@@ -253,8 +280,8 @@ define([
             self.stage.on('contentMousemove contentTouchmove', function( e ){
 
                 if ( drag ){
-                    var x = e.evt.layerX - self.sun.x()
-                        ,y = e.evt.layerY - self.sun.y()
+                    var x = e.evt.layerX + self.sun.offsetX()
+                        ,y = e.evt.layerY + self.sun.offsetY()
                         ,ang = Math.atan2( -y, x )
                         ;
 
@@ -265,6 +292,10 @@ define([
             self.stage.on('contentMouseup contentTouchend', function( e ){
                 self.start();
                 drag = false;
+            });
+
+            self.sun.on('dragmove', function( e ){
+                self.setEccentricity( self.sun.x()/self.majorAxis );
             });
         }
 
