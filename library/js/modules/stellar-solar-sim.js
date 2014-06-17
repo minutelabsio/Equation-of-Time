@@ -157,6 +157,7 @@ define([
             self.initAnim();
             self.after('ready', function(){
                 self.setDay( 0 );
+                self.layer.draw();
             });
         }
 

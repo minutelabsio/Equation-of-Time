@@ -76,7 +76,7 @@ define([
             imageObj.src = earthAbove;
 
             var meanSolarLine = new Kinetic.Line({
-                points: [0, 0, -dim( r )*2, 0]
+                points: [0, 0, -dim( r )*1.75, 0]
                 ,stroke: colors.yellow
                 ,strokeWidth: 2
             });
@@ -85,8 +85,8 @@ define([
             this.meanSolarNoon.add( meanSolarLine );
 
             var trueSolarLine = new Kinetic.Line({
-                points: [0, 0, -dim( r )*2, 0]
-                ,stroke: colors.blue
+                points: [0, 0, -dim( r )*1.75, 0]
+                ,stroke: colors.red
                 ,strokeWidth: 2
             });
 
@@ -95,6 +95,16 @@ define([
 
             earth.add(this.meanSolarNoon);
             earth.add(this.trueSolarNoon);
+
+            this.eotWedge = new Kinetic.Wedge({
+                x: 0
+                ,y: 0
+                ,fill: colors.red
+                ,radius: dim( r ) * 1.5
+                ,angle: 0
+            });
+
+            earth.add( this.eotWedge );
 
             var sun = new Kinetic.Circle({
                 x: dim(300)
@@ -211,6 +221,7 @@ define([
                 ,sun = this.sun
                 ,x = earth.offsetX()
                 ,y = earth.offsetY()
+                ,eot
                 ;
 
             this.meanSolarNoon.rotation( -a );
@@ -219,6 +230,12 @@ define([
             y -= sun.offsetY();
 
             this.trueSolarNoon.rotation( Math.atan2( -y, -x ) * deg );
+
+            eot = this.trueSolarNoon.rotation() % 360 - this.meanSolarNoon.rotation() % 360;
+            this.eotWedge.clockwise( eot > 0 );
+            this.eotWedge.angle( (-eot + 360) % 360 );
+            this.eotWedge.fill( eot > 0 ? colors.red : colors.yellow );
+            this.eotWedge.rotation( (this.trueSolarNoon.rotation() + 180)%360 );
         }
 
         // Initialize events
