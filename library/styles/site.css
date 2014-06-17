@@ -17,3 +17,13 @@ html, body, #wrap-outer {
   width: 600px;
   height: 600px;
 }
+
+/* line 22, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-sim {
+  background: #1a1a1a url('../images/sky.png?1395448799');
+  background-size: 200%;
+  border: 1px solid #1a1a1a;
+  margin: auto;
+  width: 600px;
+  height: 600px;
+}

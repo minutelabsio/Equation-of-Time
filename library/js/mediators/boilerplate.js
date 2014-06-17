@@ -1,11 +1,13 @@
 define([
     'jquery',
     'moddef',
-    'modules/stellar-solar-sim'
+    'modules/stellar-solar-sim',
+    'modules/eccentric-orbit-sim'
 ], function(
     $,
     M,
-    StellarSolarSim
+    StellarSolarSim,
+    EccentricOrbitSim
 ) {
     'use strict';
 
@@ -38,7 +40,12 @@ define([
 
             this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
             this.sims.stellarSolar.after('ready', function(){
-                self.sims.stellarSolar.start();
+                //self.sims.stellarSolar.start();
+            });
+
+            this.sims.eccentricOrbit = EccentricOrbitSim('#eccentric-orbit-sim');
+            this.sims.eccentricOrbit.after('ready', function(){
+                self.sims.eccentricOrbit.start();
             });
         }
 
