@@ -2,12 +2,14 @@ define([
     'jquery',
     'moddef',
     'modules/stellar-solar-sim',
-    'modules/eccentric-orbit-sim'
+    'modules/eccentric-orbit-sim',
+    'modules/eot-graph'
 ], function(
     $,
     M,
     StellarSolarSim,
-    EccentricOrbitSim
+    EccentricOrbitSim,
+    EOTGraph
 ) {
     'use strict';
 
@@ -40,12 +42,26 @@ define([
 
             this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
             this.sims.stellarSolar.after('ready', function(){
-                //self.sims.stellarSolar.start();
+                self.sims.stellarSolar.start();
             });
 
             this.sims.eccentricOrbit = EccentricOrbitSim('#eccentric-orbit-sim');
             this.sims.eccentricOrbit.after('ready', function(){
                 self.sims.eccentricOrbit.start();
+            });
+
+            this.sims.eccentricOrbitPlot = EOTGraph('#eccentric-orbit-plot');
+            this.sims.eccentricOrbitPlot.scaleY *= 10;
+            this.sims.eccentricOrbit.on('change:eccentricity', function(){
+                self.sims.eccentricOrbitPlot.plot( function(x){
+                    return self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );
+                }, 0.01);
+            });
+            this.sims.eccentricOrbit.emit('change:eccentricity', this.sims.eccentricOrbit.e);
+
+            this.sims.eccentricOrbit.on('change', function( e, data ){
+                // console.log(data.day)
+                self.sims.eccentricOrbitPlot.setMarker( data.day / self.sims.eccentricOrbit.daysPerYear );
             });
         }
 

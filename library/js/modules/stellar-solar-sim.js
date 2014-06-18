@@ -191,7 +191,7 @@ define([
                 ,r = self.earthDist
                 ;
             // automatically cycle the days
-            self.day = d % self.daysPerYear;
+            self.day = (d + self.daysPerYear) % self.daysPerYear;
             rot = Pi2 * self.day;
             ang = rot / self.daysPerYear;
 
@@ -243,7 +243,7 @@ define([
 
                 if ( drag ){
                     e.evt.preventDefault();
-                    
+
                     var x = e.evt.layerX - self.sun.x()
                         ,y = e.evt.layerY - self.sun.y()
                         ,ang = Math.atan2( -y, x )

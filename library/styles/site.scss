@@ -19,7 +19,42 @@ html, body, #wrap-outer {
 }
 
 #eccentric-orbit-sim {
-    margin: auto;
-    width: 600px;
+    float: left;
+    width: 80%;
+    max-width: 600px;
     height: 600px;
+}
+
+#eccentric-orbit-plot {
+    position: relative;
+    float: left;
+    width: 20%;
+    margin-left: -40px;
+    max-width: 200px;
+    height: 600px;
+
+    &:before {
+        content: 'behind';
+        position: absolute;
+        top: 1em;
+        left: 0;
+        color: $grey;
+    }
+
+    &:after {
+        content: 'ahead';
+        position: absolute;
+        top: 1em;
+        right: 0;
+        color: $grey;
+    }
+
+    > div:after {
+        content: 'mean';
+        position: absolute;
+        top: -1em;
+        left: 50%;
+        margin-left: -1em;
+        color: $grey;
+    }
 }

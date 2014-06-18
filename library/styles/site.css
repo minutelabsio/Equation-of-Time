@@ -19,7 +19,43 @@ html, body, #wrap-outer {
 
 /* line 21, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-sim {
-  margin: auto;
-  width: 600px;
+  float: left;
+  width: 80%;
+  max-width: 600px;
   height: 600px;
+}
+
+/* line 28, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot {
+  position: relative;
+  float: left;
+  width: 20%;
+  margin-left: -40px;
+  max-width: 200px;
+  height: 600px;
+}
+/* line 36, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot:before {
+  content: 'behind';
+  position: absolute;
+  top: 1em;
+  left: 0;
+  color: gainsboro;
+}
+/* line 44, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot:after {
+  content: 'ahead';
+  position: absolute;
+  top: 1em;
+  right: 0;
+  color: gainsboro;
+}
+/* line 52, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot > div:after {
+  content: 'mean';
+  position: absolute;
+  top: -1em;
+  left: 50%;
+  margin-left: -1em;
+  color: gainsboro;
 }

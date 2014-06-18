@@ -251,7 +251,7 @@ define([
                 ;
 
             // automatically cycle the days
-            self.day = d % self.daysPerYear;
+            self.day = (d + self.daysPerYear) % self.daysPerYear;
             rot = Pi2 * self.day;
             meanAng = -rot / self.daysPerYear;
             E = meanAng + e * Math.sin( meanAng ) / ( 1 - e * Math.cos( meanAng ) );
@@ -261,6 +261,30 @@ define([
             self.sunAngle( -meanAng );
             self.stellarAngle( rot );
             self.recalc();
+            self.emit('change', {
+                day: self.day
+                ,E: E
+                ,eotAngle: self.eotWedge.angle()
+            });
+        }
+
+        ,calcEOTAngle: function( d ){
+
+            var self = this
+                ,E // eccentric anomoly
+                ,meanAng
+                ,e = self.e // eccentricity
+                ,rot // day angle
+                ,earth = self.earth
+                ,b = self.minorAxis
+                ,a = self.majorAxis
+                ;
+
+            rot = Pi2 * d;
+            meanAng = -rot / self.daysPerYear;
+            E = meanAng + e * Math.sin( meanAng ) / ( 1 - e * Math.cos( meanAng ) );
+
+            return (E - meanAng) / Pi2;
         }
 
         ,setEccentricity: function( e ){
@@ -272,6 +296,7 @@ define([
             this.orbitLine.radiusY( this.minorAxis );
             this.layer.draw();
             this.bgLayer.draw();
+            this.emit('change:eccentricity', e);
         }
 
         // in radians
@@ -330,7 +355,7 @@ define([
 
                 if ( drag ){
                     e.evt.preventDefault();
-                    
+
                     var x = e.evt.layerX + self.sun.offsetX()
                         ,y = e.evt.layerY + self.sun.offsetY()
                         ,e = self.e // eccentricity
