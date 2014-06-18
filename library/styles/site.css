@@ -36,7 +36,7 @@ html, body, #wrap-outer {
 }
 /* line 36, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot:before {
-  content: 'behind';
+  content: 'late';
   position: absolute;
   top: 1em;
   left: 0;
@@ -44,7 +44,7 @@ html, body, #wrap-outer {
 }
 /* line 44, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot:after {
-  content: 'ahead';
+  content: 'early';
   position: absolute;
   top: 1em;
   right: 0;

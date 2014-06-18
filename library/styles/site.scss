@@ -34,7 +34,7 @@ html, body, #wrap-outer {
     height: 600px;
 
     &:before {
-        content: 'behind';
+        content: 'late';
         position: absolute;
         top: 1em;
         left: 0;
@@ -42,7 +42,7 @@ html, body, #wrap-outer {
     }
 
     &:after {
-        content: 'ahead';
+        content: 'early';
         position: absolute;
         top: 1em;
         right: 0;
