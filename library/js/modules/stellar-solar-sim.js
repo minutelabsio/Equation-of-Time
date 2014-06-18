@@ -234,6 +234,7 @@ define([
                 ;
 
             self.earth.on('mousedown touchstart', function( e ){
+                e.evt.preventDefault();
                 // stop the anim
                 self.stop();
                 drag = true;
@@ -241,6 +242,8 @@ define([
             self.stage.on('contentMousemove contentTouchmove', function( e ){
 
                 if ( drag ){
+                    e.evt.preventDefault();
+                    
                     var x = e.evt.layerX - self.sun.x()
                         ,y = e.evt.layerY - self.sun.y()
                         ,ang = Math.atan2( -y, x )

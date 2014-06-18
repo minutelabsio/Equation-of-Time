@@ -321,6 +321,7 @@ define([
                 ;
 
             self.earth.on('mousedown touchstart', function( e ){
+                e.evt.preventDefault();
                 // stop the anim
                 self.stop();
                 drag = true;
@@ -328,6 +329,8 @@ define([
             self.stage.on('contentMousemove contentTouchmove', function( e ){
 
                 if ( drag ){
+                    e.evt.preventDefault();
+                    
                     var x = e.evt.layerX + self.sun.offsetX()
                         ,y = e.evt.layerY + self.sun.offsetY()
                         ,e = self.e // eccentricity

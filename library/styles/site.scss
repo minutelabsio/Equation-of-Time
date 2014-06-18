@@ -8,21 +8,17 @@ html, body, #wrap-outer {
 
 #viewport {
     padding: 4em 0;
+    background: $deep-grey-dark image-url('sky.png');
+    background-size: 200%;
 }
 
 #stellar-solar-sim {
-    background: $deep-grey-dark image-url('sky.png');
-    background-size: 200%;
-    border: 1px solid $deep-grey-dark;
     margin: auto;
     width: 600px;
     height: 600px;
 }
 
 #eccentric-orbit-sim {
-    background: $deep-grey-dark image-url('sky.png');
-    background-size: 200%;
-    border: 1px solid $deep-grey-dark;
     margin: auto;
     width: 600px;
     height: 600px;
