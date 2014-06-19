@@ -71,7 +71,6 @@ define([
                 self.earthImg = earthImg;
                 earth.add(earthImg);
 
-                stage.draw();
                 self.resolve('ready');
             };
             imageObj.src = earthAbove;

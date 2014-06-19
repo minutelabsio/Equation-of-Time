@@ -3,13 +3,15 @@ define([
     'moddef',
     'modules/stellar-solar-sim',
     'modules/eccentric-orbit-sim',
-    'modules/eot-graph'
+    'modules/eot-graph',
+    'modules/axial-tilt-sim'
 ], function(
     $,
     M,
     StellarSolarSim,
     EccentricOrbitSim,
-    EOTGraph
+    EOTGraph,
+    AxialTiltSim
 ) {
     'use strict';
 
@@ -42,12 +44,12 @@ define([
 
             this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
             this.sims.stellarSolar.after('ready', function(){
-                self.sims.stellarSolar.start();
+                // self.sims.stellarSolar.start();
             });
 
             this.sims.eccentricOrbit = EccentricOrbitSim('#eccentric-orbit-sim');
             this.sims.eccentricOrbit.after('ready', function(){
-                self.sims.eccentricOrbit.start();
+                // self.sims.eccentricOrbit.start();
             });
 
             this.sims.eccentricOrbitPlot = EOTGraph('#eccentric-orbit-plot');
@@ -62,6 +64,11 @@ define([
             this.sims.eccentricOrbit.on('change', function( e, data ){
                 // console.log(data.day)
                 self.sims.eccentricOrbitPlot.setMarker( data.day / self.sims.eccentricOrbit.daysPerYear );
+            });
+
+            this.sims.axialTilt = AxialTiltSim('#axial-tilt-sim');
+            this.sims.axialTilt.after('ready', function(){
+                self.sims.axialTilt.start();
             });
         }
 

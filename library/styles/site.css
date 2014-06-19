@@ -59,3 +59,11 @@ html, body, #wrap-outer {
   margin-left: -1em;
   color: gainsboro;
 }
+
+/* line 62, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-sim {
+  clear: both;
+  margin: auto;
+  width: 600px;
+  height: 600px;
+}

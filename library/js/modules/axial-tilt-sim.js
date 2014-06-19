@@ -16,6 +16,7 @@ define([
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
     var earthAbove = req.toUrl('../../images/earth-north.png');
+    var earthNA = req.toUrl('../../images/earth-na.gif');
 
     // Page-level Module
     var Module = M({
@@ -41,14 +42,18 @@ define([
             self.animSpeed = 1;
             self.daysPerYear = 6;
             self.day = 0;
-            self.earthDist = dim(180);
+            self.earthDist = dim(140);
+            var offset = {
+                x: -dim( 300 )
+                ,y: -dim( 300 )
+            };
 
             // init simulation
             var layer = new Kinetic.Layer();
             var r = 55;
             var earth = new Kinetic.Group({
-                x: dim( 300 )
-                ,y: dim( 300 )
+                x: -offset.x
+                ,y: -offset.y
             });
             this.earth = earth;
 
@@ -59,97 +64,81 @@ define([
                     x: 0
                     ,y: 0
                     ,image: imageObj
-                    ,width: dim( 2*r )
-                    ,height: dim( 2*r )
-                    ,rotation: 90
+                    ,width: dim( 2*r + 8 )
+                    ,height: dim( 2*r + 8 )
                     ,offset: {
-                        x: dim( r )
-                        ,y: dim( r )
+                        x: dim( r + 5 )
+                        ,y: dim( r + 4 )
                     }
                 });
                 self.earthImg = earthImg;
                 earth.add(earthImg);
 
+                // equator line
+                earth.add( new Kinetic.Line({
+                    points: [ -dim( r ), 0, dim( r ), 0 ]
+                    ,stroke: colors.red
+                    ,strokeWidth: 2
+                }));
+
                 self.resolve('ready');
             };
-            imageObj.src = earthAbove;
+            imageObj.src = earthNA;
 
-            // stellar wedge
-            var wedgeStellar = new Kinetic.Wedge({
+            // axial line
+            earth.add( new Kinetic.Line({
+                points: [ 0, -dim( r ), 0, -dim( r ) - 50 ]
+                ,stroke: colors.grey
+                ,strokeWidth: 2
+            }));
+            // handle
+            self.axisHandle = new Kinetic.Circle({
+                x: 0
+                ,y: -dim( r ) - 50
+                ,fill: colors.grey
+                ,radius: 8
+            });
+            earth.add( self.axisHandle );
+
+            // sun
+            self.sun = new Kinetic.Group({
+                x: self.earthDist
+                ,y: 0
+                ,offset: offset
+            });
+
+            var sunR = 20;
+            var sunCircle = new Kinetic.Circle({
                 x: 0
                 ,y: 0
-                ,radius: dim( r ) * 1.25
-                ,angle: 0
-                ,fill: colors.blue
-                ,stroke: colors.blue
-                ,strokeWidth: 0
-                ,rotation: 180
-                ,scaleY: -1
-            });
-
-            var wedgeDiff = new Kinetic.Wedge({
-                x: 0
-                ,y: 0
-                ,radius: dim( r ) * 1.5
-                ,angle: 0
-                ,fill: colors.yellow
-                ,stroke: colors.yellow
-                ,strokeWidth: 0
-                ,rotation: 180
-                ,scaleY: -1
-            });
-
-            var solarLine = new Kinetic.Line({
-                points: [0, 0, -dim( r )*2, 0]
-                ,stroke: colors.yellow
-                ,strokeWidth: 2
-            });
-
-            this.solarNoon = new Kinetic.Group();
-            this.solarNoon.add( solarLine );
-
-            var stellarLine = new Kinetic.Line({
-                points: [0, 0, -dim( r )*2, 0]
-                ,stroke: colors.blue
-                ,strokeWidth: 2
-            });
-
-            this.stellarNoon = new Kinetic.Group();
-            this.stellarNoon.add( stellarLine );
-
-            this.wedgeStellar = wedgeStellar;
-            this.wedgeDiff = wedgeDiff;
-
-            earth.add(this.solarNoon);
-            earth.add(wedgeDiff);
-            earth.add(this.stellarNoon);
-            earth.add(wedgeStellar);
-
-            var sun = new Kinetic.Circle({
-                x: dim(300)
-                ,y: dim(300)
-                ,radius: dim(30)
+                ,radius: dim(sunR)
                 ,fill: colors.yellowLight
             });
 
-            self.sun = sun;
-
             var sunCorona = new Kinetic.Circle({
-                x: dim(300)
-                ,y: dim(300)
-                ,radius: dim(45)
+                x: 0
+                ,y: 0
+                ,radius: dim(sunR*1.5)
                 // ,fillRadialGradientStartPoint: { x: 0, y: 0 }
-                ,fillRadialGradientStartRadius: dim(30)
-                ,fillRadialGradientEndRadius: dim(45)
+                ,fillRadialGradientStartRadius: dim(sunR)
+                ,fillRadialGradientEndRadius: dim(sunR*1.5)
                 ,fillRadialGradientColorStops: [0, colors.yellow, 1, 'rgba(0,0,0,0)']
             });
 
+            self.sun.add( sunCircle );
+            self.sun.add( sunCorona );
+
             layer.add(earth);
+            layer.add(self.sun);
+            // solar ecliptic
+            layer.add( new Kinetic.Line({
+                points: [ -dim( r ), 0, dim( r ), 0 ]
+                ,offset: offset
+                ,stroke: colors.yellow
+                ,strokeWidth: 2
+            }));
 
-            layer.add(sunCorona);
-            layer.add(sun);
             stage.add(layer);
-
             self.layer = layer;
 
             self.initEvents();
@@ -187,42 +176,27 @@ define([
                 ,ang // year angle
                 ,rot // day angle
                 ,earth = self.earth
+                ,sun = self.sun
                 ,r = self.earthDist
+                ,s
                 ;
+
             // automatically cycle the days
             self.day = (d + self.daysPerYear) % self.daysPerYear;
-            rot = Pi2 * self.day;
-            ang = rot / self.daysPerYear;
+            ang = Pi2 * self.day / self.daysPerYear;
 
-            earth.offsetX( -r * Math.cos(-ang) );
-            earth.offsetY( -r * Math.sin(-ang) );
-            self.sunAngle( ang );
-            self.stellarAngle( rot );
-            self.updateDiff();
-        }
+            sun.x( r * Math.cos(ang) );
+            s = 1 + 0.3 * Math.sin(ang);
+            if ( s > 1 ){
+                sun.moveToTop();
+            } else {
+                sun.moveToBottom();
+            }
 
-        // in radians
-        ,sunAngle: function( angle ){
-
-            angle %= Pi2;
-            this.sunAng = angle * deg;
-        }
-
-        // in radians
-        ,stellarAngle: function( angle ){
-
-            angle %= Pi2;
-            // convert
-            angle *= deg;
-            this.wedgeStellar.setAngle( angle );
-            this.earthImg.rotation( 90-angle );
-        }
-
-        ,updateDiff: function(){
-            var a = this.sunAng;
-            this.wedgeDiff.rotation( 180-a );
-            this.wedgeDiff.setAngle( this.wedgeStellar.getAngle() - a );
-            this.solarNoon.rotation( -a );
+            sun.getChildren().each(function( n ){
+                n.scaleX(s);
+                n.scaleY(s);
+            });
         }
 
         // Initialize events
@@ -232,10 +206,8 @@ define([
                 ,drag = false
                 ;
 
-            self.earth.on('mousedown touchstart', function( e ){
+            self.axisHandle.on('mousedown touchstart', function( e ){
                 e.evt.preventDefault();
-                // stop the anim
-                self.stop();
                 drag = true;
             });
             self.stage.on('contentMousemove contentTouchmove', function( e ){
@@ -243,17 +215,18 @@ define([
                 if ( drag ){
                     e.evt.preventDefault();
 
-                    var x = e.evt.layerX - self.sun.x()
-                        ,y = e.evt.layerY - self.sun.y()
-                        ,ang = Math.atan2( -y, x )
+                    var x = e.evt.layerX - self.earth.x()
+                        ,y = e.evt.layerY - self.earth.y()
+                        ,ang = Math.atan2( x, -y ) * deg
                         ;
 
-                    self.setDay( ang * self.daysPerYear / Pi2 );
+                    ang = Math.max(Math.min( ang, 30 ), -30);
+                    self.tilt = ang;
+                    self.earth.rotation( ang );
                     self.layer.draw();
                 }
             });
             self.stage.on('contentMouseup contentTouchend', function( e ){
-                self.start();
                 drag = false;
             });
         }
