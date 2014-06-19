@@ -48,8 +48,8 @@ define([
             self.scaleX = dim( 580, 1 );
             self.scaleY = dim( 280 );
             self.offsetY = 0;//dim( 300 );
-            self.posColor = colors.red;
-            self.negColor = colors.yellow;
+            self.posColor = colors.yellow;
+            self.negColor = colors.red;
 
             // init simulation
             var layer = new Kinetic.Layer({
@@ -89,6 +89,7 @@ define([
                 ,name: 'line'
                 ,closed: true
                 ,strokeWidth: 1
+                ,stroke: self.posColor
             });
 
             this.layer.add( line );

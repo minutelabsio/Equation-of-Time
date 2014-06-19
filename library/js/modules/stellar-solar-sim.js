@@ -45,7 +45,7 @@ define([
 
             // init simulation
             var layer = new Kinetic.Layer();
-            var r = 55;
+            var r = 50;
             var earth = new Kinetic.Group({
                 x: dim( 300 )
                 ,y: dim( 300 )
@@ -59,12 +59,12 @@ define([
                     x: 0
                     ,y: 0
                     ,image: imageObj
-                    ,width: dim( 2*r )
-                    ,height: dim( 2*r )
+                    ,width: dim( 2*r ) + 8
+                    ,height: dim( 2*r ) + 8
                     ,rotation: 90
                     ,offset: {
-                        x: dim( r )
-                        ,y: dim( r )
+                        x: dim( r ) + 5
+                        ,y: dim( r ) + 4
                     }
                 });
                 self.earthImg = earthImg;
@@ -78,7 +78,7 @@ define([
             var wedgeStellar = new Kinetic.Wedge({
                 x: 0
                 ,y: 0
-                ,radius: dim( r ) * 1.25
+                ,radius: dim( r ) * 1.3
                 ,angle: 0
                 ,fill: colors.blue
                 ,stroke: colors.blue
@@ -90,7 +90,7 @@ define([
             var wedgeDiff = new Kinetic.Wedge({
                 x: 0
                 ,y: 0
-                ,radius: dim( r ) * 1.5
+                ,radius: dim( r ) * 1.55
                 ,angle: 0
                 ,fill: colors.yellow
                 ,stroke: colors.yellow
@@ -129,7 +129,7 @@ define([
                 x: dim(300)
                 ,y: dim(300)
                 ,radius: dim(30)
-                ,fill: colors.yellowLight
+                ,fill: colors.yellow
             });
 
             self.sun = sun;

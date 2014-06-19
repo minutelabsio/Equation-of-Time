@@ -15,9 +15,7 @@ define([
 
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
-    var degSymb = '°';
     var earthAbove = req.toUrl('../../images/earth-north.png');
-    var earthNA = req.toUrl('../../images/earth-na.gif');
 
     // Page-level Module
     var Module = M({
@@ -43,9 +41,10 @@ define([
             self.animSpeed = 80;
             self.daysPerYear = 365;
             self.day = 0;
-            self.earthDist = dim(240);
-            self.maxTilt = 30;
             self.tilt = 0;
+            self.earthDist = dim(260);
+            self.posColor = colors.red;
+            self.negColor = colors.yellow;
             var offset = {
                 x: -dim( 300 )
                 ,y: -dim( 300 )
@@ -53,10 +52,10 @@ define([
 
             // init simulation
             var layer = new Kinetic.Layer();
-            var r = 100;
+            var r = 55;
             var earth = new Kinetic.Group({
-                x: -offset.x
-                ,y: -offset.y
+                x: dim( 300 )
+                ,y: dim( 300 )
             });
             this.earth = earth;
 
@@ -77,75 +76,55 @@ define([
                 self.earthImg = earthImg;
                 earth.add(earthImg);
 
-                // equator line
-                earth.add( new Kinetic.Line({
-                    points: [ -dim( r ), 0, dim( r ), 0 ]
-                    ,stroke: colors.red
-                    ,strokeWidth: 2
-                }));
-
                 self.resolve('ready');
             };
-            imageObj.src = earthNA;
+            imageObj.src = earthAbove;
 
-            // axial line
-            earth.add( new Kinetic.Line({
-                points: [ 0, -dim( r ), 0, -dim( 2*r ) ]
-                ,stroke: colors.grey
-                ,strokeWidth: 2
-            }));
-            // handle
-            self.axisHandle = new Kinetic.Circle({
-                x: 0
-                ,y: -dim( 2*r )
-                ,fill: colors.grey
-                ,radius: 8
-            });
-            earth.add( self.axisHandle );
-
-            // zero axis
-            layer.add( new Kinetic.Line({
-                points: [ 0, -dim( r ), 0, -dim( 2*r ) ]
+            // mean ecliptic (equator)
+            layer.add( new Kinetic.Circle({
+                radius: self.earthDist
+                ,x: 0
+                ,y: 0
                 ,offset: offset
-                ,stroke: colors.deepGreyLight
-                ,strokeWidth: 2
+                ,stroke: colors.red
+                ,strokeWidth: 1
                 ,dash: [5,5]
             }));
 
-            self.axisArc = new Kinetic.Arc({
+            // true ecliptic
+            self.ecliptic = new Kinetic.Ellipse({
+                x: 0
+                ,y: 0
+                ,radius: {
+                    x: self.earthDist
+                    ,y: self.earthDist
+                }
+                ,offset: offset
+                ,stroke: colors.yellow
+                ,strokeWidth: 1
+            });
+
+            layer.add( self.ecliptic );
+
+            self.eotWedge = new Kinetic.Wedge({
                 x: -offset.x
                 ,y: -offset.y
-                ,innerRadius: dim( 1.5*r )
-                ,outerRadius: dim( 1.6*r )
+                ,radius: self.earthDist
+                ,rotation: 90
                 ,angle: 0
-                ,rotation: -90
                 ,fill: colors.red
             });
 
-            layer.add( self.axisArc );
-
-            self.tiltText = new Kinetic.Text({
-                text: '0' + degSymb
-                ,x: -40
-                ,y: -dim( 2.4*r ) - 20
-                ,width: 90
-                ,offset: offset
-                ,stroke: colors.grey
-                ,strokeWidth: 1
-                ,fontFamily: '"latin-modern-mono-light", Courier, monospace'
-                ,fontSize: 20
-                ,align: 'center'
-            });
-            layer.add( self.tiltText );
+            layer.add( self.eotWedge );
 
             // sun
             self.sun = new Kinetic.Group({
-                x: self.earthDist
-                ,y: 0
+                x: 0
+                ,y: -self.earthDist
                 ,offset: offset
             });
 
-            var sunR = 40;
+            var sunR = 20;
             var sunCircle = new Kinetic.Circle({
                 x: 0
                 ,y: 0
@@ -166,17 +145,27 @@ define([
             self.sun.add( sunCircle );
             self.sun.add( sunCorona );
 
-            layer.add(earth);
-            layer.add(self.sun);
-            // solar ecliptic
-            layer.add( new Kinetic.Line({
-                points: [ -dim( r ), 0, dim( r ), 0 ]
+            // mean sun
+            self.meanSun = new Kinetic.Group({
+                x: 0
+                ,y: self.earthDist
                 ,offset: offset
-                ,stroke: colors.yellow
-                ,strokeWidth: 2
+            });
+
+            self.meanSun.add( new Kinetic.Circle({
+                x: 0
+                ,y: 0
+                ,radius: dim(sunR)
+                ,stroke: colors.grey
+                ,strokeWidth: 1
             }));
 
+            layer.add(earth);
+            layer.add(self.sun);
+            layer.add(self.meanSun);
+
             stage.add(layer);
+
             self.layer = layer;
 
             self.initEvents();
@@ -215,64 +204,59 @@ define([
                 ,rot // day angle
                 ,earth = self.earth
                 ,sun = self.sun
+                ,meanSun = self.meanSun
+                ,eotWedge = self.eotWedge
                 ,r = self.earthDist
+                ,x
+                ,y
                 ,s
+                ,eot
                 ;
 
             // automatically cycle the days
             self.day = (d + self.daysPerYear) % self.daysPerYear;
             ang = -Pi2 * self.day / self.daysPerYear + Pi2*0.25;
+            ang = ang % Pi2;
 
-            sun.x( r * Math.cos(ang) );
-            s = 1 + 0.3 * Math.sin(ang);
-            if ( s > 1 ){
-                sun.moveToTop();
-            } else {
-                sun.moveToBottom();
-            }
+            x = r * Math.cos(ang) * Math.cos( self.tilt / deg );
+            y = r * Math.sin(ang);
 
-            sun.getChildren().each(function( n ){
-                n.scaleX(s);
-                n.scaleY(s);
-            });
+            sun.x( x );
+            sun.y( y );
 
-            self.emit('change:day', self.day);
+            meanSun.x( r * Math.cos(ang) );
+            meanSun.y( r * Math.sin(ang) );
+
+            eot = ang * deg;
+            eotWedge.rotation( eot );
+            eot -= (Math.atan2( y, x ) * deg - 360) % 360;
+            eot = (eot + 180) % 360 - 180;
+            eotWedge.clockwise( eot > 0 );
+            eotWedge.fill( eot > 0 ? self.posColor : self.negColor );
+            eotWedge.angle( -eot );
+        }
+
+        ,setTilt: function( degrees ){
+            this.tilt = degrees;
+            this.recalc();
+        }
+
+        ,recalc: function(){
+            var self = this
+                ,tilt = self.tilt
+                ;
+
+            self.ecliptic.radiusX( self.earthDist * Math.abs(Math.cos( tilt / deg )) );
+            self.layer.draw();
         }
 
         // Initialize events
         ,initEvents: function(){
 
             var self = this
-                ,drag = false
                 ;
 
-            self.axisHandle.on('mousedown touchstart', function( e ){
-                e.evt.preventDefault();
-                drag = true;
-            });
-            self.stage.on('contentMousemove contentTouchmove', function( e ){
 
-                if ( drag ){
-                    e.evt.preventDefault();
-
-                    var x = e.evt.layerX - self.earth.x()
-                        ,y = e.evt.layerY - self.earth.y()
-                        ,ang = Math.atan2( x, -y ) * deg
-                        ;
-
-                    ang = Math.max(Math.min( ang, self.maxTilt ), -self.maxTilt);
-                    self.tilt = ang;
-                    self.earth.rotation( ang );
-                    self.tiltText.text( ang.toFixed(1) + degSymb );
-                    self.axisArc.clockwise( ang < 0 );
-                    self.axisArc.angle( ang );
-                    self.emit('change:tilt', self.tilt);
-                    self.layer.draw();
-                }
-            });
-            self.stage.on('contentMouseup contentTouchend', function( e ){
-                drag = false;
-            });
         }
 
     }, ['events']);

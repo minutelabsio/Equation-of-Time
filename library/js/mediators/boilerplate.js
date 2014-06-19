@@ -4,16 +4,30 @@ define([
     'modules/stellar-solar-sim',
     'modules/eccentric-orbit-sim',
     'modules/eot-graph',
-    'modules/axial-tilt-sim'
+    'modules/axial-tilt-sim',
+    'modules/ecliptic-tilt-sim'
 ], function(
     $,
     M,
     StellarSolarSim,
     EccentricOrbitSim,
     EOTGraph,
-    AxialTiltSim
+    AxialTiltSim,
+    EclipticTiltSim
 ) {
     'use strict';
+
+    var Pi2 = 2*Math.PI;
+    var deg = Math.PI / 180;
+
+    function calcEOTFromTilt( ang, tilt ){
+        var RA = Math.atan( Math.tan( ang ) * Math.cos( tilt * deg ) ), eot;
+        // tan is discontinuous... so we make it continuous
+        RA += Math.floor(ang / Math.PI + 0.5) * Math.PI;
+        eot = ang - RA;
+        eot = Math.abs(eot) < 1e-6 ? 0 : eot;
+        return eot;
+    }
 
     // Page-level Mediator
     var Mediator = M({
@@ -62,13 +76,33 @@ define([
             this.sims.eccentricOrbit.emit('change:eccentricity', this.sims.eccentricOrbit.e);
 
             this.sims.eccentricOrbit.on('change', function( e, data ){
-                // console.log(data.day)
                 self.sims.eccentricOrbitPlot.setMarker( data.day / self.sims.eccentricOrbit.daysPerYear );
             });
 
             this.sims.axialTilt = AxialTiltSim('#axial-tilt-sim');
             this.sims.axialTilt.after('ready', function(){
                 self.sims.axialTilt.start();
+            });
+
+            this.sims.eclipticTilt = EclipticTiltSim('#ecliptic-tilt-sim');
+            this.sims.axialTilt.on('change:tilt', function( e, tilt ){
+                self.sims.eclipticTilt.setTilt( tilt );
+            });
+            this.sims.axialTilt.on('change:day', function( e, day ){
+                self.sims.eclipticTilt.setDay( day );
+                self.sims.eclipticTilt.layer.draw();
+            });
+
+            this.sims.axialTiltPlot = EOTGraph('#axial-tilt-plot');
+            this.sims.axialTiltPlot.scaleY *= 10;
+            this.sims.axialTilt.on('change:tilt', function( e, tilt ){
+                self.sims.axialTiltPlot.plot( function( x ){
+                    return calcEOTFromTilt( x * Math.PI * 2, tilt );
+                }, 0.01);
+            });
+            this.sims.axialTilt.emit('change:tilt', this.sims.axialTilt.tilt);
+            this.sims.axialTilt.on('change:day', function( e, day ){
+                self.sims.axialTiltPlot.setMarker( day / self.sims.axialTilt.daysPerYear );
             });
         }
 

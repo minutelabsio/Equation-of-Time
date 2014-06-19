@@ -77,7 +77,7 @@ define([
 
             var meanSolarLine = new Kinetic.Line({
                 points: [0, 0, -dim( r )*1.75, 0]
-                ,stroke: colors.yellow
+                ,stroke: colors.red
                 ,strokeWidth: 2
             });
 
@@ -86,7 +86,7 @@ define([
 
             var trueSolarLine = new Kinetic.Line({
                 points: [0, 0, -dim( r )*1.75, 0]
-                ,stroke: colors.red
+                ,stroke: colors.yellow
                 ,strokeWidth: 2
             });
 
@@ -156,7 +156,7 @@ define([
                 }
                 ,x: dim( 300 )
                 ,y: dim( 300 )
-                ,stroke: colors.grey
+                ,stroke: colors.deepGreyLight
                 ,strokeWidth: 2
                 ,dash: [5,5]
             });
@@ -333,7 +333,7 @@ define([
             eot = this.trueSolarNoon.rotation() % 360 - this.meanSolarNoon.rotation() % 360;
             this.eotWedge.clockwise( eot > 0 );
             this.eotWedge.angle( (-eot + 360) % 360 );
-            this.eotWedge.fill( eot > 0 ? colors.red : colors.yellow );
+            this.eotWedge.fill( eot > 0 ? colors.yellow : colors.red );
             this.eotWedge.rotation( (this.trueSolarNoon.rotation() + 180)%360 );
         }
 
