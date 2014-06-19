@@ -15,6 +15,7 @@ define([
 
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
+    var degSymb = '°';
     var earthAbove = req.toUrl('../../images/earth-north.png');
     var earthNA = req.toUrl('../../images/earth-na.gif');
 
@@ -87,18 +88,52 @@ define([
 
             // axial line
             earth.add( new Kinetic.Line({
-                points: [ 0, -dim( r ), 0, -dim( r ) - 50 ]
+                points: [ 0, -dim( r ), 0, -dim( r + 50 ) ]
                 ,stroke: colors.grey
                 ,strokeWidth: 2
             }));
             // handle
             self.axisHandle = new Kinetic.Circle({
                 x: 0
-                ,y: -dim( r ) - 50
+                ,y: -dim( r + 50 )
                 ,fill: colors.grey
                 ,radius: 8
             });
             earth.add( self.axisHandle );
+
+            layer.add( new Kinetic.Line({
+                points: [ 0, -dim( r ), 0, -dim( r + 70 ) ]
+                ,offset: offset
+                ,stroke: colors.deepGreyLight
+                ,strokeWidth: 2
+                ,dash: [5,5]
+            }));
+
+            self.axisArc = new Kinetic.Arc({
+                x: -offset.x
+                ,y: -offset.y
+                ,innerRadius: dim( r + 20 )
+                ,outerRadius: dim( r + 30 )
+                ,angle: 0
+                ,rotation: -90
+                ,fill: colors.red
+            });
+
+            layer.add( self.axisArc );
+
+            self.tiltText = new Kinetic.Text({
+                text: '0' + degSymb
+                ,x: -40
+                ,y: -dim( r + 90 )
+                ,width: 90
+                ,offset: offset
+                ,stroke: colors.grey
+                ,strokeWidth: 1
+                ,fontFamily: '"latin-modern-mono-light", Courier, monospace'
+                ,fontSize: 20
+                ,align: 'center'
+            });
+            layer.add( self.tiltText );
 
             // sun
             self.sun = new Kinetic.Group({
@@ -223,6 +258,9 @@ define([
                     ang = Math.max(Math.min( ang, 30 ), -30);
                     self.tilt = ang;
                     self.earth.rotation( ang );
+                    self.tiltText.text( ang.toFixed(1) + degSymb );
+                    self.axisArc.clockwise( ang < 0 );
+                    self.axisArc.angle( ang );
                     self.layer.draw();
                 }
             });
