@@ -224,6 +224,13 @@ define([
             sun.x( x );
             sun.y( y );
 
+            s = 1 + 0.5 * Math.cos(ang) * Math.sin( self.tilt / deg );
+
+            sun.getChildren().each(function( n ){
+                n.scaleX(s);
+                n.scaleY(s);
+            });
+
             meanSun.x( r * Math.cos(ang) );
             meanSun.y( r * Math.sin(ang) );
 

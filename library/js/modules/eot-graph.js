@@ -144,7 +144,7 @@ define([
                         line.stroke( line.fill() );
                         py = 0;
                         this.allPoints = this.allPoints.concat( points );
-                        points = [];
+                        points = [ points[ points.length - 2 ], points[ points.length - 1] ];
                         break;
                     }
                 }

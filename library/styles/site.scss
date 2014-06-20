@@ -31,6 +31,8 @@ html, body, #wrap-outer {
 }
 
 #eccentric-orbit-sim {
+    position: relative;
+    z-index: 2;
     float: left;
     width: 80%;
     max-width: 600px;
@@ -52,7 +54,9 @@ html, body, #wrap-outer {
         content: 'late';
         position: absolute;
         top: 1em;
-        left: 0;
+        left: 50%;
+        margin-left: -5em;
+        z-index: 2;
         color: $grey;
     }
 
@@ -60,7 +64,9 @@ html, body, #wrap-outer {
         content: 'early';
         position: absolute;
         top: 1em;
-        right: 0;
+        right: 50%;
+        margin-right: -5em;
+        z-index: 2;
         color: $grey;
     }
 
@@ -75,7 +81,22 @@ html, body, #wrap-outer {
 }
 
 #eccentric-orbit-plot {
-    margin-left: -20px;
+    width: 40%;
+    max-width: 600px;
+    margin-left: -20%;
+}
+
+#axial-tilt-plot {
+    float: right;
+}
+
+#axial-tilt-map {
+    $r: 1280/720;
+    width: 600px;
+    height: (600px / $r);
+    max-width: 600px;
+    background: $deep-grey-dark image-url('map-4.png') no-repeat 0 0;
+    background-size: 100%;
 }
 
 #axial-tilt-sim,

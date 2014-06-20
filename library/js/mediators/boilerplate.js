@@ -5,7 +5,8 @@ define([
     'modules/eccentric-orbit-sim',
     'modules/eot-graph',
     'modules/axial-tilt-sim',
-    'modules/ecliptic-tilt-sim'
+    'modules/ecliptic-tilt-sim',
+    'modules/eot-map'
 ], function(
     $,
     M,
@@ -13,7 +14,8 @@ define([
     EccentricOrbitSim,
     EOTGraph,
     AxialTiltSim,
-    EclipticTiltSim
+    EclipticTiltSim,
+    EOTMap
 ) {
     'use strict';
 
@@ -97,20 +99,29 @@ define([
             this.sims.axialTiltPlot.scaleY *= 10;
             this.sims.axialTilt.on('change:tilt', function( e, tilt ){
                 self.sims.axialTiltPlot.plot( function( x ){
-                    return calcEOTFromTilt( x * Math.PI * 2, tilt );
+                    return calcEOTFromTilt( x * Pi2, tilt );
                 }, 0.01);
             });
-            this.sims.axialTilt.emit('change:tilt', this.sims.axialTilt.tilt);
             this.sims.axialTilt.on('change:day', function( e, day ){
                 self.sims.axialTiltPlot.setMarker( day / self.sims.axialTilt.daysPerYear );
             });
+
+            this.sims.axialTiltMap = EOTMap('#axial-tilt-map');
+            this.sims.axialTilt.on('change:tilt', function( e, tilt ){
+                self.sims.axialTiltMap.setTilt( tilt );
+            });
+            this.sims.axialTilt.on('change:day', function( e, day ){
+                self.sims.axialTiltMap.setDay( day );
+            });
+
+            this.sims.axialTilt.emit('change:tilt', this.sims.axialTilt.tilt);
 
             // eot plot
             this.sims.eotPlot = EOTGraph('#eot-plot');
             this.sims.eotPlot.scaleY *= 10;
             function setEotFn( tilt ){
                 self.sims.eotPlot.plot( function( x ){
-                    return calcEOTFromTilt( (x - 76/365) * Math.PI * 2, tilt ) + self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );;
+                    return calcEOTFromTilt( (x - 76/365) * Pi2, tilt ) + self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );;
                 }, 0.01);
             }
             this.sims.axialTilt.on('change:tilt', function( e, tilt ){
