@@ -39,12 +39,12 @@ html, body, #wrap-outer {
 }
 
 #eccentric-orbit-plot,
-#axial-tilt-plot {
+#axial-tilt-plot,
+#eot-plot {
     position: relative;
     float: left;
     width: 20%;
     margin-top: 2em;
-    margin-left: -20px;
     max-width: 200px;
     height: 600px;
 
@@ -72,6 +72,10 @@ html, body, #wrap-outer {
         margin-left: -1em;
         color: $grey;
     }
+}
+
+#eccentric-orbit-plot {
+    margin-left: -20px;
 }
 
 #axial-tilt-sim,

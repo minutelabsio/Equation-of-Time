@@ -16,8 +16,8 @@ define([
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
     var degSymb = '°';
-    var earthAbove = req.toUrl('../../images/earth-north.png');
-    var earthNA = req.toUrl('../../images/earth-na.gif');
+    var earthAbove = req.toUrl('../../images/earth-north-2.png');
+    var earthPM = req.toUrl('../../images/earth-prime-meridian-2.png');
 
     // Page-level Module
     var Module = M({
@@ -86,7 +86,7 @@ define([
 
                 self.resolve('ready');
             };
-            imageObj.src = earthNA;
+            imageObj.src = earthPM;
 
             // axial line
             earth.add( new Kinetic.Line({

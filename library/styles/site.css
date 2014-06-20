@@ -35,20 +35,21 @@ html, body, #wrap-outer {
   margin-top: 2em;
 }
 
-/* line 42, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 43, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot,
-#axial-tilt-plot {
+#axial-tilt-plot,
+#eot-plot {
   position: relative;
   float: left;
   width: 20%;
   margin-top: 2em;
-  margin-left: -20px;
   max-width: 200px;
   height: 600px;
 }
 /* line 51, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot:before,
-#axial-tilt-plot:before {
+#axial-tilt-plot:before,
+#eot-plot:before {
   content: 'late';
   position: absolute;
   top: 1em;
@@ -57,7 +58,8 @@ html, body, #wrap-outer {
 }
 /* line 59, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot:after,
-#axial-tilt-plot:after {
+#axial-tilt-plot:after,
+#eot-plot:after {
   content: 'early';
   position: absolute;
   top: 1em;
@@ -66,7 +68,8 @@ html, body, #wrap-outer {
 }
 /* line 67, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot > div:after,
-#axial-tilt-plot > div:after {
+#axial-tilt-plot > div:after,
+#eot-plot > div:after {
   content: 'mean';
   position: absolute;
   top: -2em;
@@ -75,7 +78,12 @@ html, body, #wrap-outer {
   color: gainsboro;
 }
 
-/* line 78, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 77, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot {
+  margin-left: -20px;
+}
+
+/* line 82, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #axial-tilt-sim,
 #ecliptic-tilt-sim {
   margin-top: 2em;

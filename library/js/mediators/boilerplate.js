@@ -104,6 +104,25 @@ define([
             this.sims.axialTilt.on('change:day', function( e, day ){
                 self.sims.axialTiltPlot.setMarker( day / self.sims.axialTilt.daysPerYear );
             });
+
+            // eot plot
+            this.sims.eotPlot = EOTGraph('#eot-plot');
+            this.sims.eotPlot.scaleY *= 10;
+            function setEotFn( tilt ){
+                self.sims.eotPlot.plot( function( x ){
+                    return calcEOTFromTilt( (x + 76/365) * Math.PI * 2, tilt ) + self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );;
+                }, 0.01);
+            }
+            this.sims.axialTilt.on('change:tilt', function( e, tilt ){
+                setEotFn( tilt );
+            });
+            this.sims.eccentricOrbit.on('change:eccentricity', function(){
+                setEotFn( self.sims.axialTilt.tilt );
+            });
+            this.sims.axialTilt.on('change:day', function( e, day ){
+                self.sims.eotPlot.setMarker( day / self.sims.axialTilt.daysPerYear );
+            });
+            setEotFn( self.sims.axialTilt.tilt );
         }
 
     }, ['events']);
