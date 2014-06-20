@@ -66,7 +66,7 @@ define([
                 ,y: 0
                 ,radius: 7
                 ,fill: colors.blue
-                ,stroke: colors.deepGrey
+                ,stroke: '#fff'
                 ,strokeWidth: 1
             });
 
@@ -100,7 +100,7 @@ define([
         ,plot: function( fn, resolution ){
 
             var line
-                ,points = []
+                ,points = [ 0, 0 ]
                 ,sx = this.scaleX
                 ,sy = this.scaleY
                 ,x = 0
@@ -151,6 +151,7 @@ define([
             }
 
             points.push( sx, sy*fn(1) );
+            points.push( sx, 0 );
             line.fill( py >= 0 ? this.posColor : this.negColor );
             line.stroke( line.fill() );
             line.points( points );

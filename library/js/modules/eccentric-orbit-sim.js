@@ -196,6 +196,20 @@ define([
                 ,align: 'center'
             }));
 
+            self.eText = new Kinetic.Text({
+                text: 'e = 0.1'
+                ,x: 0
+                ,y: 16
+                ,width: dim( 100 )
+                ,stroke: colors.greyDark
+                ,strokeWidth: 1
+                ,fontFamily: '"latin-modern-mono-light", Courier, monospace'
+                ,fontSize: 18
+                ,align: 'center'
+            });
+
+            sunGuides.add( self.eText );
+
             bgLayer.add(self.orbitLine);
             bgLayer.add(sunGuides);
             layer.add(self.sun);
@@ -277,13 +291,19 @@ define([
                 ,earth = self.earth
                 ,b = self.minorAxis
                 ,a = self.majorAxis
+                ,theta // true anomoly
+                ,cosE
                 ;
 
             rot = Pi2 * d;
-            meanAng = -rot / self.daysPerYear;
+            meanAng = rot / self.daysPerYear;
             E = meanAng + e * Math.sin( meanAng ) / ( 1 - e * Math.cos( meanAng ) );
-
-            return (E - meanAng) / Pi2;
+            cosE = Math.cos( E );
+            theta = Math.acos( (cosE - e)/(1 - e * cosE) );
+            if ( E > Math.PI ){
+                theta = Pi2 - theta;
+            }
+            return (meanAng - theta);
         }
 
         ,setEccentricity: function( e ){
@@ -293,6 +313,7 @@ define([
             this.sun.x( this.majorAxis * e );
             this.orbitLine.radiusX( this.majorAxis );
             this.orbitLine.radiusY( this.minorAxis );
+            this.eText.text('e = '+e.toFixed(2));
             this.layer.draw();
             this.bgLayer.draw();
             this.emit('change:eccentricity', e);

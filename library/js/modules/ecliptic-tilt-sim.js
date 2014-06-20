@@ -156,7 +156,7 @@ define([
                 x: 0
                 ,y: 0
                 ,radius: dim(sunR)
-                ,stroke: colors.grey
+                ,stroke: colors.red
                 ,strokeWidth: 1
             }));
 

@@ -67,7 +67,7 @@ define([
             });
 
             this.sims.eccentricOrbitPlot = EOTGraph('#eccentric-orbit-plot');
-            this.sims.eccentricOrbitPlot.scaleY *= 10;
+            this.sims.eccentricOrbitPlot.scaleY *= 1;
             this.sims.eccentricOrbit.on('change:eccentricity', function(){
                 self.sims.eccentricOrbitPlot.plot( function(x){
                     return self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );
@@ -110,7 +110,7 @@ define([
             this.sims.eotPlot.scaleY *= 10;
             function setEotFn( tilt ){
                 self.sims.eotPlot.plot( function( x ){
-                    return calcEOTFromTilt( (x + 76/365) * Math.PI * 2, tilt ) + self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );;
+                    return calcEOTFromTilt( (x - 76/365) * Math.PI * 2, tilt ) + self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );;
                 }, 0.01);
             }
             this.sims.axialTilt.on('change:tilt', function( e, tilt ){
