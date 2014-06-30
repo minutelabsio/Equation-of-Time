@@ -48,8 +48,8 @@ define([
             self.scaleX = dim( 580, 1 );
             self.scaleY = dim( 280 );
             self.offsetY = 0;//dim( 300 );
-            self.posColor = colors.red;
-            self.negColor = colors.yellow;
+            self.posColor = colors.yellow;
+            self.negColor = colors.red;
 
             // init simulation
             var layer = new Kinetic.Layer({
@@ -66,7 +66,7 @@ define([
                 ,y: 0
                 ,radius: 7
                 ,fill: colors.blue
-                ,stroke: colors.deepGrey
+                ,stroke: '#fff'
                 ,strokeWidth: 1
             });
 
@@ -89,6 +89,7 @@ define([
                 ,name: 'line'
                 ,closed: true
                 ,strokeWidth: 1
+                ,stroke: self.posColor
             });
 
             this.layer.add( line );
@@ -99,7 +100,7 @@ define([
         ,plot: function( fn, resolution ){
 
             var line
-                ,points = []
+                ,points = [ 0, 0 ]
                 ,sx = this.scaleX
                 ,sy = this.scaleY
                 ,x = 0
@@ -143,13 +144,14 @@ define([
                         line.stroke( line.fill() );
                         py = 0;
                         this.allPoints = this.allPoints.concat( points );
-                        points = [];
+                        points = [ points[ points.length - 2 ], points[ points.length - 1] ];
                         break;
                     }
                 }
             }
 
             points.push( sx, sy*fn(1) );
+            points.push( sx, 0 );
             line.fill( py >= 0 ? this.posColor : this.negColor );
             line.stroke( line.fill() );
             line.points( points );

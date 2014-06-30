@@ -1,9 +1,21 @@
 // site styles
-// @import 'compass/css3';
+@import 'compass/css3';
+@import 'compass/utilities/general';
 @import '_vars';
 
 html, body, #wrap-outer {
     height: 100%;
+}
+
+// .kineticjs-content {
+//     border: 1px solid $grey;
+// }
+
+.wrap {
+    width: 100%;
+    max-width: 800px;
+    @include clearfix;
+    margin: 80px auto;
 }
 
 #viewport {
@@ -19,17 +31,22 @@ html, body, #wrap-outer {
 }
 
 #eccentric-orbit-sim {
+    position: relative;
+    z-index: 2;
     float: left;
     width: 80%;
     max-width: 600px;
     height: 600px;
+    margin-top: 2em;
 }
 
-#eccentric-orbit-plot {
+#eccentric-orbit-plot,
+#axial-tilt-plot,
+#eot-plot {
     position: relative;
     float: left;
     width: 20%;
-    margin-left: -40px;
+    margin-top: 2em;
     max-width: 200px;
     height: 600px;
 
@@ -37,7 +54,9 @@ html, body, #wrap-outer {
         content: 'late';
         position: absolute;
         top: 1em;
-        left: 0;
+        left: 50%;
+        margin-left: -5em;
+        z-index: 2;
         color: $grey;
     }
 
@@ -45,16 +64,44 @@ html, body, #wrap-outer {
         content: 'early';
         position: absolute;
         top: 1em;
-        right: 0;
+        right: 50%;
+        margin-right: -5em;
+        z-index: 2;
         color: $grey;
     }
 
     > div:after {
         content: 'mean';
         position: absolute;
-        top: -1em;
+        top: -2em;
         left: 50%;
         margin-left: -1em;
         color: $grey;
     }
+}
+
+#eccentric-orbit-plot {
+    width: 40%;
+    max-width: 600px;
+    margin-left: -20%;
+}
+
+#axial-tilt-plot {
+    float: right;
+}
+
+#axial-tilt-map {
+    $r: 1280/720;
+    width: 600px;
+    height: (600px / $r);
+    max-width: 600px;
+    background: $deep-grey-dark image-url('map-4.png') no-repeat 0 0;
+    background-size: 100%;
+}
+
+#axial-tilt-sim,
+#ecliptic-tilt-sim {
+    margin-top: 2em;
+    width: 300px;
+    height: 300px;
 }

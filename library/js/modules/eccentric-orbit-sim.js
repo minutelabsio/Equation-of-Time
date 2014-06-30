@@ -15,7 +15,7 @@ define([
 
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
-    var earthAbove = req.toUrl('../../images/earth-north.png');
+    var earthAbove = req.toUrl('../../images/earth-north-2.png');
 
     // Page-level Module
     var Module = M({
@@ -71,14 +71,13 @@ define([
                 self.earthImg = earthImg;
                 earth.add(earthImg);
 
-                stage.draw();
                 self.resolve('ready');
             };
             imageObj.src = earthAbove;
 
             var meanSolarLine = new Kinetic.Line({
                 points: [0, 0, -dim( r )*1.75, 0]
-                ,stroke: colors.yellow
+                ,stroke: colors.red
                 ,strokeWidth: 2
             });
 
@@ -87,7 +86,7 @@ define([
 
             var trueSolarLine = new Kinetic.Line({
                 points: [0, 0, -dim( r )*1.75, 0]
-                ,stroke: colors.red
+                ,stroke: colors.yellow
                 ,strokeWidth: 2
             });
 
@@ -157,7 +156,7 @@ define([
                 }
                 ,x: dim( 300 )
                 ,y: dim( 300 )
-                ,stroke: colors.grey
+                ,stroke: colors.deepGreyLight
                 ,strokeWidth: 2
                 ,dash: [5,5]
             });
@@ -196,6 +195,20 @@ define([
                 ,fontSize: 18
                 ,align: 'center'
             }));
+
+            self.eText = new Kinetic.Text({
+                text: 'e = 0.1'
+                ,x: 0
+                ,y: 16
+                ,width: dim( 100 )
+                ,stroke: colors.greyDark
+                ,strokeWidth: 1
+                ,fontFamily: '"latin-modern-mono-light", Courier, monospace'
+                ,fontSize: 18
+                ,align: 'center'
+            });
+
+            sunGuides.add( self.eText );
 
             bgLayer.add(self.orbitLine);
             bgLayer.add(sunGuides);
@@ -278,13 +291,19 @@ define([
                 ,earth = self.earth
                 ,b = self.minorAxis
                 ,a = self.majorAxis
+                ,theta // true anomoly
+                ,cosE
                 ;
 
             rot = Pi2 * d;
-            meanAng = -rot / self.daysPerYear;
+            meanAng = rot / self.daysPerYear;
             E = meanAng + e * Math.sin( meanAng ) / ( 1 - e * Math.cos( meanAng ) );
-
-            return (E - meanAng) / Pi2;
+            cosE = Math.cos( E );
+            theta = Math.acos( (cosE - e)/(1 - e * cosE) );
+            if ( E > Math.PI ){
+                theta = Pi2 - theta;
+            }
+            return (meanAng - theta);
         }
 
         ,setEccentricity: function( e ){
@@ -294,6 +313,7 @@ define([
             this.sun.x( this.majorAxis * e );
             this.orbitLine.radiusX( this.majorAxis );
             this.orbitLine.radiusY( this.minorAxis );
+            this.eText.text('e = '+e.toFixed(2));
             this.layer.draw();
             this.bgLayer.draw();
             this.emit('change:eccentricity', e);
@@ -334,7 +354,7 @@ define([
             eot = this.trueSolarNoon.rotation() % 360 - this.meanSolarNoon.rotation() % 360;
             this.eotWedge.clockwise( eot > 0 );
             this.eotWedge.angle( (-eot + 360) % 360 );
-            this.eotWedge.fill( eot > 0 ? colors.red : colors.yellow );
+            this.eotWedge.fill( eot > 0 ? colors.yellow : colors.red );
             this.eotWedge.rotation( (this.trueSolarNoon.rotation() + 180)%360 );
         }
 

@@ -1,61 +1,114 @@
-/* line 5, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 6, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 html, body, #wrap-outer {
   height: 100%;
 }
 
-/* line 9, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 14, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+.wrap {
+  width: 100%;
+  max-width: 800px;
+  overflow: hidden;
+  *zoom: 1;
+  margin: 80px auto;
+}
+
+/* line 21, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #viewport {
   padding: 4em 0;
   background: #1a1a1a url('../images/sky.png?1395448799');
   background-size: 1000px;
 }
 
-/* line 15, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 27, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #stellar-solar-sim {
   margin: auto;
   width: 600px;
   height: 600px;
 }
 
-/* line 21, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 33, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-sim {
+  position: relative;
+  z-index: 2;
   float: left;
   width: 80%;
   max-width: 600px;
   height: 600px;
+  margin-top: 2em;
 }
 
-/* line 28, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
-#eccentric-orbit-plot {
+/* line 45, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot,
+#axial-tilt-plot,
+#eot-plot {
   position: relative;
   float: left;
   width: 20%;
-  margin-left: -40px;
+  margin-top: 2em;
   max-width: 200px;
   height: 600px;
 }
-/* line 36, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
-#eccentric-orbit-plot:before {
+/* line 53, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot:before,
+#axial-tilt-plot:before,
+#eot-plot:before {
   content: 'late';
   position: absolute;
   top: 1em;
-  left: 0;
+  left: 50%;
+  margin-left: -5em;
+  z-index: 2;
   color: gainsboro;
 }
-/* line 44, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
-#eccentric-orbit-plot:after {
+/* line 63, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot:after,
+#axial-tilt-plot:after,
+#eot-plot:after {
   content: 'early';
   position: absolute;
   top: 1em;
-  right: 0;
+  right: 50%;
+  margin-right: -5em;
+  z-index: 2;
   color: gainsboro;
 }
-/* line 52, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
-#eccentric-orbit-plot > div:after {
+/* line 73, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot > div:after,
+#axial-tilt-plot > div:after,
+#eot-plot > div:after {
   content: 'mean';
   position: absolute;
-  top: -1em;
+  top: -2em;
   left: 50%;
   margin-left: -1em;
   color: gainsboro;
+}
+
+/* line 83, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#eccentric-orbit-plot {
+  width: 40%;
+  max-width: 600px;
+  margin-left: -20%;
+}
+
+/* line 89, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-plot {
+  float: right;
+}
+
+/* line 93, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-map {
+  width: 600px;
+  height: 337.5px;
+  max-width: 600px;
+  background: #1a1a1a url('../images/map-4.png?1403207069') no-repeat 0 0;
+  background-size: 100%;
+}
+
+/* line 103, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-sim,
+#ecliptic-tilt-sim {
+  margin-top: 2em;
+  width: 300px;
+  height: 300px;
 }
