@@ -38,10 +38,64 @@
         @extend .icon-pause;
     }
 
+    .volume {
+        position: relative;
+        top: 5px;
+        float: right;
+        width: 120px;
+        height: 10px;
+        background: $yellow-dark;
+
+        &:before {
+            position: absolute;
+            top: -0.38em;
+            left: -1.5em;
+            font-size: 30px;
+            @extend .ctrl;
+            @extend .icon-volume:before;
+        }
+
+        &:hover:before {
+            color: $grey-dark;
+        }
+
+        .noUi-handle {
+            $size: 16px;
+            cursor: pointer;
+            width: 1.5*$size;
+            height: 1.5*$size;
+            left: -0.75*$size;
+            top: -0.5*$size;
+            border-color: $grey;
+            @include box-shadow( none );
+
+            &:after,
+            &:before {
+                left: floor(0.45*$size);
+                top: floor(0.3*$size);
+                background: $grey-dark;
+            }
+
+            &:before {
+                left: auto;
+                right: floor(0.45*$size);
+            }
+
+            &:hover {
+                &:after,
+                &:before {
+                    background: $yellow-dark;
+                }
+            }
+
+        }
+    }
+
     .seek {
         position: relative;
         top: 15px;
         margin-left: 60px;
+        margin-right: 200px;
         height: 10px;
         background: $blue;
 
@@ -54,6 +108,7 @@
             top: -0.5*$size;
             border-color: $grey;
             @include border-radius( 50% );
+            @include box-shadow( none );
 
             &:before {
                 display: none;

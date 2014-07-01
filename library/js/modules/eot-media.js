@@ -30,6 +30,7 @@ define([
             self.tracks = [];
             self.promises = [];
             self.currentTrack = 0;
+            self.volume = 1;
             self.initEvents();
 
             self.timeUpdateCallback = function(){
@@ -88,6 +89,7 @@ define([
 
                 self.currentTrack = idx;
                 track = self.tracks[ idx ];
+                track.volume( self.volume );
                 track.on('timeupdate', self.timeUpdateCallback);
                 track.currentTime( 0 );
             }
@@ -100,6 +102,7 @@ define([
                 ,playing = false
                 ,playBtn = $('<a href="#">').addClass('play').attr('title', 'play').appendTo( el )
                 ,seek = $('<div>').addClass('seek').appendTo( el )
+                ,volume = $('<div>').addClass('volume').appendTo( el )
                 ;
 
             el.hammer().on('touch', '.play', function( e ){
@@ -119,6 +122,16 @@ define([
                 }
             });
 
+            volume.noUiSlider({
+                start: self.volume,
+                // step: 1,
+                connect: 'lower',
+                range: {
+                    'min': 0.1,
+                    'max': 1
+                }
+            });
+
             self.on('time', function( e, pct ){
                 seek.val( pct * 100 );
             });
@@ -132,6 +145,10 @@ define([
                 if ( playing ){
                     self.emit('play');
                 }
+            });
+
+            volume.on('slide', function(){
+                self.emit('volume', volume.val());
             });
         }
 
@@ -151,6 +168,12 @@ define([
             self.on('seek', function( e, t ){
                 var track = self.tracks[ self.currentTrack ];
                 track.currentTime( t * track.duration() );
+            });
+
+            self.on('volume', function( e, v ){
+                var track = self.tracks[ self.currentTrack ];
+                self.volume = v;
+                track.volume( v );
             });
         }
 
