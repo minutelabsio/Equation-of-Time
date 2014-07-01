@@ -1,0 +1,59 @@
+@include font-face('mediaicons', font-files('mediaicons/fonts/mediaicons.ttf', 'mediaicons/fonts/mediaicons.svg#mediaicons'), 'mediaicons/fonts/mediaicons.eot', normal, normal);
+@include font-face('mediaicons', inline-font-files('mediaicons/fonts/mediaicons.woff', woff), $weight: normal, $style: normal);
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'mediaicons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-play:before {
+	content: "\e600";
+}
+.icon-stop:before {
+	content: "\e601";
+}
+.icon-pause:before {
+	content: "\e602";
+}
+.icon-forward:before {
+	content: "\e603";
+}
+.icon-rewind:before {
+	content: "\e604";
+}
+.icon-play2:before {
+	content: "\e605";
+}
+.icon-pause2:before {
+	content: "\e606";
+}
+.icon-stop2:before {
+	content: "\e607";
+}
+.icon-first:before {
+	content: "\e608";
+}
+.icon-last:before {
+	content: "\e609";
+}
+.icon-volume:before {
+	content: "\e60a";
+}
+.icon-loud:before {
+	content: "\e60b";
+}
+.icon-muted:before {
+	content: "\e60c";
+}
+.icon-equalizer:before {
+	content: "\e60d";
+}

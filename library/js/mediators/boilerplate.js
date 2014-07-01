@@ -1,6 +1,7 @@
 define([
     'jquery',
     'moddef',
+    'modules/eot-media',
     'modules/stellar-solar-sim',
     'modules/eccentric-orbit-sim',
     'modules/eot-graph',
@@ -10,6 +11,7 @@ define([
 ], function(
     $,
     M,
+    EOTMedia,
     StellarSolarSim,
     EccentricOrbitSim,
     EOTGraph,
@@ -40,6 +42,16 @@ define([
             var self = this;
             self.sims = {};
             self.initEvents();
+
+            self.media = EOTMedia({
+                controls: '#media-controls'
+                ,tracks: [
+                    '#media-sim1'
+                ]
+            });
+            self.media.after('ready', function(){
+                console.log('blah');
+            });
 
             $(function(){
                 self.onDomReady();

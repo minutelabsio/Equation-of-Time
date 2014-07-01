@@ -2,6 +2,9 @@
 @import 'compass/css3';
 @import 'compass/utilities/general';
 @import '_vars';
+@import '_jquery.nouislider';
+@import '_media-icons';
+@import '_media-controls';
 
 html, body, #wrap-outer {
     height: 100%;

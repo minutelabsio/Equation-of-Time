@@ -1,0 +1,79 @@
+
+#media-controls {
+    margin: 2em auto;
+    padding: 20px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
+
+    .ctrl {
+        text-decoration: none;
+        color: $grey-dark;
+        font-family: 'mediaicons';
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+
+        &:hover {
+            color: #fff;
+        }
+    }
+
+    .play {
+        float: left;
+        font-size: 40px;
+        width: 1em;
+        height: 1em;
+        @extend .ctrl;
+        @extend .icon-play;
+    }
+
+    &.playing .play {
+        @extend .icon-pause;
+    }
+
+    .seek {
+        position: relative;
+        top: 15px;
+        margin-left: 60px;
+        height: 10px;
+        background: $blue;
+
+        .noUi-handle {
+            $size: 16px;
+            cursor: pointer;
+            width: 1.5*$size;
+            height: 1.5*$size;
+            left: -0.75*$size;
+            top: -0.5*$size;
+            border-color: $grey;
+            @include border-radius( 50% );
+
+            &:before {
+                display: none;
+            }
+
+            &:after {
+                width: 0.5*$size;
+                height: 0.5*$size;
+                left: floor(0.45*$size);
+                top: floor(0.45*$size);
+                background: $grey-dark;
+                @include border-radius( 50% );
+            }
+
+            &:hover {
+                &:after {
+                    background: $blue;
+                }
+            }
+
+        }
+    }
+}

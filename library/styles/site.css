@@ -1,9 +1,402 @@
-/* line 6, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* Functional styling;
+ * These styles are required for noUiSlider to function.
+ * You don't need to change these rules to apply your design.
+ */
+/* line 7, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-target,
+.noUi-target * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -ms-touch-action: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 16, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-base {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* line 21, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-origin {
+  position: absolute;
+  right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+/* line 28, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-handle {
+  position: relative;
+  z-index: 1;
+}
+
+/* line 32, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-stacking .noUi-handle {
+  /* This class is applied to the lower origin when
+     its values is > 50%. */
+  z-index: 10;
+}
+
+/* line 37, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-stacking + .noUi-origin {
+  /* Fix stacking order in IE7, which incorrectly
+     creates a new context for the origins. */
+  *z-index: -1;
+}
+
+/* line 42, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-state-tap .noUi-origin {
+  -webkit-transition: left 0.3s, top 0.3s;
+  transition: left 0.3s, top 0.3s;
+}
+
+/* line 46, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-state-drag * {
+  cursor: inherit !important;
+}
+
+/* Slider size and handle placement;
+ */
+/* line 52, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-horizontal {
+  height: 18px;
+}
+
+/* line 55, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-horizontal .noUi-handle {
+  width: 34px;
+  height: 28px;
+  left: -17px;
+  top: -6px;
+}
+
+/* line 61, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-horizontal.noUi-extended {
+  padding: 0 15px;
+}
+
+/* line 64, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-horizontal.noUi-extended .noUi-origin {
+  right: -15px;
+}
+
+/* line 67, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-vertical {
+  width: 18px;
+}
+
+/* line 70, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-vertical .noUi-handle {
+  width: 28px;
+  height: 34px;
+  left: -6px;
+  top: -17px;
+}
+
+/* line 76, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-vertical.noUi-extended {
+  padding: 15px 0;
+}
+
+/* line 79, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-vertical.noUi-extended .noUi-origin {
+  bottom: -15px;
+}
+
+/* Styling;
+ */
+/* line 85, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-background {
+  background: #FAFAFA;
+  box-shadow: inset 0 1px 1px #f0f0f0;
+}
+
+/* line 89, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-connect {
+  background: #3FB8AF;
+  box-shadow: inset 0 0 3px rgba(51, 51, 51, 0.45);
+  -webkit-transition: background 450ms;
+  transition: background 450ms;
+}
+
+/* line 95, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-origin {
+  border-radius: 2px;
+}
+
+/* line 98, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-target {
+  border-radius: 4px;
+  border: 1px solid #D3D3D3;
+  box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;
+}
+
+/* line 103, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-target.noUi-connect {
+  box-shadow: inset 0 0 3px rgba(51, 51, 51, 0.45), 0 3px 6px -5px #bbbbbb;
+}
+
+/* Handles and cursors;
+ */
+/* line 109, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-dragable {
+  cursor: w-resize;
+}
+
+/* line 112, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-vertical .noUi-dragable {
+  cursor: n-resize;
+}
+
+/* line 115, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-handle {
+  border: 1px solid #D9D9D9;
+  border-radius: 3px;
+  background: #FFF;
+  cursor: default;
+  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;
+}
+
+/* line 124, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-active {
+  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #DDD, 0 3px 6px -3px #BBB;
+}
+
+/* Handle stripes;
+ */
+/* line 133, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-handle:before,
+.noUi-handle:after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 14px;
+  width: 1px;
+  background: #E8E7E6;
+  left: 14px;
+  top: 6px;
+}
+
+/* line 143, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-handle:after {
+  left: 17px;
+}
+
+/* line 147, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-vertical .noUi-handle:before,
+.noUi-vertical .noUi-handle:after {
+  width: 14px;
+  height: 1px;
+  left: 6px;
+  top: 14px;
+}
+
+/* line 153, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+.noUi-vertical .noUi-handle:after {
+  top: 17px;
+}
+
+/* Disabled state;
+ */
+/* line 160, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+[disabled].noUi-connect,
+[disabled] .noUi-connect {
+  background: #B8B8B8;
+}
+
+/* line 163, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_jquery.nouislider.scss */
+[disabled] .noUi-handle {
+  cursor: not-allowed;
+}
+
+@font-face {
+  font-family: "mediaicons";
+  src: url('../fonts/mediaicons/fonts/mediaicons.eot');
+  src: url('../fonts/mediaicons/fonts/mediaicons.eot?#iefix') format('eot'), url('../fonts/mediaicons/fonts/mediaicons.ttf') format('truetype'), url('../fonts/mediaicons/fonts/mediaicons.svg#mediaicons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "mediaicons";
+  src: url('data:application/x-font-woff;base64,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') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* line 4, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'mediaicons';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* line 18, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-play:before, #media-controls .play:before {
+  content: "\e600";
+}
+
+/* line 21, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-stop:before {
+  content: "\e601";
+}
+
+/* line 24, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-pause:before, #media-controls.playing .play:before {
+  content: "\e602";
+}
+
+/* line 27, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-forward:before {
+  content: "\e603";
+}
+
+/* line 30, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-rewind:before {
+  content: "\e604";
+}
+
+/* line 33, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-play2:before {
+  content: "\e605";
+}
+
+/* line 36, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-pause2:before {
+  content: "\e606";
+}
+
+/* line 39, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-stop2:before {
+  content: "\e607";
+}
+
+/* line 42, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-first:before {
+  content: "\e608";
+}
+
+/* line 45, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-last:before {
+  content: "\e609";
+}
+
+/* line 48, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-volume:before {
+  content: "\e60a";
+}
+
+/* line 51, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-loud:before {
+  content: "\e60b";
+}
+
+/* line 54, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-muted:before {
+  content: "\e60c";
+}
+
+/* line 57, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-icons.scss */
+.icon-equalizer:before {
+  content: "\e60d";
+}
+
+/* line 2, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-controls.scss */
+#media-controls {
+  margin: 2em auto;
+  padding: 20px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.15);
+}
+/* line 8, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-controls.scss */
+#media-controls .ctrl, #media-controls .play {
+  text-decoration: none;
+  color: #c8c8c8;
+  font-family: 'mediaicons';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* line 23, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-controls.scss */
+#media-controls .ctrl:hover, #media-controls .play:hover {
+  color: #fff;
+}
+/* line 28, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-controls.scss */
+#media-controls .play {
+  float: left;
+  font-size: 40px;
+  width: 1em;
+  height: 1em;
+}
+/* line 41, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-controls.scss */
+#media-controls .seek {
+  position: relative;
+  top: 15px;
+  margin-left: 60px;
+  height: 10px;
+  background: #2888e4;
+}
+/* line 48, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-controls.scss */
+#media-controls .seek .noUi-handle {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  left: -12px;
+  top: -8px;
+  border-color: gainsboro;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+}
+/* line 58, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-controls.scss */
+#media-controls .seek .noUi-handle:before {
+  display: none;
+}
+/* line 62, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-controls.scss */
+#media-controls .seek .noUi-handle:after {
+  width: 8px;
+  height: 8px;
+  left: 7px;
+  top: 7px;
+  background: #c8c8c8;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+}
+/* line 72, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/_media-controls.scss */
+#media-controls .seek .noUi-handle:hover:after {
+  background: #2888e4;
+}
+
+/* line 9, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 html, body, #wrap-outer {
   height: 100%;
 }
 
-/* line 14, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 17, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 .wrap {
   width: 100%;
   max-width: 800px;
@@ -12,21 +405,21 @@ html, body, #wrap-outer {
   margin: 80px auto;
 }
 
-/* line 21, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 24, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #viewport {
   padding: 4em 0;
   background: #1a1a1a url('../images/sky.png?1395448799');
   background-size: 1000px;
 }
 
-/* line 27, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 30, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #stellar-solar-sim {
   margin: auto;
   width: 600px;
   height: 600px;
 }
 
-/* line 33, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 36, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-sim {
   position: relative;
   z-index: 2;
@@ -37,7 +430,7 @@ html, body, #wrap-outer {
   margin-top: 2em;
 }
 
-/* line 45, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 48, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot,
 #axial-tilt-plot,
 #eot-plot {
@@ -48,7 +441,7 @@ html, body, #wrap-outer {
   max-width: 200px;
   height: 600px;
 }
-/* line 53, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 56, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot:before,
 #axial-tilt-plot:before,
 #eot-plot:before {
@@ -60,7 +453,7 @@ html, body, #wrap-outer {
   z-index: 2;
   color: gainsboro;
 }
-/* line 63, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 66, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot:after,
 #axial-tilt-plot:after,
 #eot-plot:after {
@@ -72,7 +465,7 @@ html, body, #wrap-outer {
   z-index: 2;
   color: gainsboro;
 }
-/* line 73, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 76, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot > div:after,
 #axial-tilt-plot > div:after,
 #eot-plot > div:after {
@@ -84,28 +477,28 @@ html, body, #wrap-outer {
   color: gainsboro;
 }
 
-/* line 83, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 86, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot {
   width: 40%;
   max-width: 600px;
   margin-left: -20%;
 }
 
-/* line 89, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 92, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #axial-tilt-plot {
   float: right;
 }
 
-/* line 93, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 96, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #axial-tilt-map {
   width: 600px;
   height: 337.5px;
   max-width: 600px;
-  background: #1a1a1a url('../images/map-4.png?1403207069') no-repeat 0 0;
+  background: #1a1a1a url('../images/map-4.png?1404154162') no-repeat 0 0;
   background-size: 100%;
 }
 
-/* line 103, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 106, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #axial-tilt-sim,
 #ecliptic-tilt-sim {
   margin-top: 2em;
