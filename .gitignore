@@ -4,3 +4,7 @@
 node_modules/
 dist/
 _site/
+
+library/media/chaotic-pendulum.mp3
+
+library/media/chaotic-pendulum.ogg

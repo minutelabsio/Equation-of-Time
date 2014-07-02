@@ -60,12 +60,12 @@ define([
                     x: 0
                     ,y: 0
                     ,image: imageObj
-                    ,width: dim( 2*r )
-                    ,height: dim( 2*r )
+                    ,width: dim( 2*r ) + 8
+                    ,height: dim( 2*r ) + 8
                     ,rotation: 90
                     ,offset: {
-                        x: dim( r )
-                        ,y: dim( r )
+                        x: dim( r ) + 5
+                        ,y: dim( r ) + 4
                     }
                 });
                 self.earthImg = earthImg;

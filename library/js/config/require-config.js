@@ -12,6 +12,10 @@ require.config({
         'svg.path': {
             deps: ['svg']
         }
+
+        ,'popcorn': {
+            exports: 'Popcorn'
+        }
     },
 
     paths: {
@@ -37,6 +41,8 @@ require.config({
         'jquery': 'vendor/jquery',
         'hammerjs': 'vendor/hammer',
 
+        'jquery.nouislider': 'vendor/jquery.nouislider.min',
+
         // svg
         'svg': 'vendor/svg',
         'svg.path': 'vendor/svg.path',
@@ -46,6 +52,8 @@ require.config({
 
         // kinetic.js
         'kinetic': 'vendor/kinetic',
+
+        'popcorn': 'vendor/popcorn-custom',
 
         // requestAnimationFrame polyfill
         'raf': 'vendor/raf'
