@@ -184,18 +184,7 @@ define([
                 ,stroke: colors.greyDark
                 ,strokeWidth: 4
             }));
-            sunGuides.add( new Kinetic.Text({
-                text: 'Drag the Sun to change the orbit'
-                ,x: -200
-                ,y: dim(180)
-                ,width: 400
-                ,stroke: colors.greyDark
-                ,strokeWidth: 1
-                ,fontFamily: '"latin-modern-mono-light", Courier, monospace'
-                ,fontSize: 18
-                ,align: 'center'
-            }));
-
+            
             self.eText = new Kinetic.Text({
                 text: 'e = 0.1'
                 ,x: 0

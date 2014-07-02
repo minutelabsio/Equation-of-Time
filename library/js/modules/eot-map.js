@@ -48,17 +48,38 @@ define([
 
             self.stage = stage;
 
+            // vars
+            self.daysPerYear = 365;
+            self.posColor = helpers.adjustAlpha(colors.yellow, 0.8);
+            self.negColor = helpers.adjustAlpha(colors.red, 0.8);
+
+            self.setup();
+            self.initEvents();
+            // self.initAnim();
+            self.after('ready', function(){
+                self.setDay( 0 );
+                self.layer.draw();
+            });
+            self.resolve('ready');
+        }
+
+        ,setup: function(){
+
+            var self = this
+                ,stage = self.stage
+                ;
+
             function dim( r, useY ){
                 return r/600*( useY ? self.$el.height() : self.$el.width() );
             }
 
-            // vars
+            stage.destroyChildren();
+            stage.width( self.$el.width() );
+            stage.height( self.$el.height() );
+
             self.scaleX = dim( 600 );
             self.scaleY = dim( 150, 1 );
             self.offsetY = dim( 300, 1 );
-            self.daysPerYear = 365;
-            self.posColor = helpers.adjustAlpha(colors.yellow, 0.8);
-            self.negColor = helpers.adjustAlpha(colors.red, 0.8);
 
             // init simulation
             var layer = new Kinetic.Layer({
@@ -123,14 +144,6 @@ define([
             stage.add(layer);
 
             self.layer = layer;
-
-            self.initEvents();
-            // self.initAnim();
-            self.after('ready', function(){
-                self.setDay( 0 );
-                self.layer.draw();
-            });
-            self.resolve('ready');
         }
 
         ,plot: function( fn, resolution ){
