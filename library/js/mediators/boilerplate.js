@@ -239,23 +239,32 @@ define([
 
             /////////////
             // Slide 4
+            var year = 365.24;
+            var vernal = 79 + 17/24;
+            var perihelion = 3 + 14.5/24;
+            this.sims.eccCtrl = EccentricOrbitSim('#ecc-ctrl');
+            this.sims.axisCtrl = AxialTiltSim('#axis-ctrl');
+
             this.sims.eotPlot = EOTGraph('#eot-plot');
-            this.sims.eotPlot.scaleY *= 10;
+            this.sims.eotPlot.scaleY = 400;
             function setEotFn( tilt ){
                 self.sims.eotPlot.plot( function( x ){
-                    return calcEOTFromTilt( (x - 76/365) * Pi2, tilt ) + self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );;
+                    return calcEOTFromTilt( (x + perihelion/year - vernal/year) * Pi2, tilt ) + self.sims.eccCtrl.calcEOTAngle( x * self.sims.eccCtrl.daysPerYear );
                 }, 0.01);
             }
-            this.sims.axialTilt.on('change:tilt', function( e, tilt ){
+            this.sims.axisCtrl.on('change:tilt', function( e, tilt ){
                 setEotFn( tilt );
             });
-            this.sims.eccentricOrbit.on('change:eccentricity', function(){
-                setEotFn( self.sims.axialTilt.tilt );
+            this.sims.eccCtrl.on('change:eccentricity', function(){
+                setEotFn( self.sims.axisCtrl.tilt );
             });
-            this.sims.axialTilt.on('change:day', function( e, day ){
-                self.sims.eotPlot.setMarker( day / self.sims.axialTilt.daysPerYear );
+            this.sims.eccCtrl.on('change', function( e, data ){
+                var x = (data.day / self.sims.eccCtrl.daysPerYear);
+                self.sims.eotPlot.setMarker( x );
+                self.sims.axisCtrl.setDay( x * self.sims.axisCtrl.daysPerYear );
+                self.sims.axisCtrl.layer.draw();
             });
-            setEotFn( self.sims.axialTilt.tilt );
+            setEotFn( self.sims.axisCtrl.tilt );
 
             //////////////
             // General
@@ -296,7 +305,7 @@ define([
                     if ( sim.setup ){
                         var par = sim.$el.parents('.slides > section');
                         var vis = par.is(':visible');
-                        console.log( par );
+
                         if ( !vis ){
                             par.show();
                         }
@@ -311,6 +320,8 @@ define([
 
                 self.sims.eccentricOrbit.emit('change:eccentricity', self.sims.eccentricOrbit.e);
                 self.sims.axialTilt.emit('change:tilt', self.sims.axialTilt.tilt);
+                self.sims.eotPlot.scaleY = 400;
+                setEotFn( self.sims.axisCtrl.tilt );
 
             }, 1000));
         }

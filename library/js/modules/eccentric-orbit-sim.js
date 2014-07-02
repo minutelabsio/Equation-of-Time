@@ -184,12 +184,12 @@ define([
                 ,stroke: colors.greyDark
                 ,strokeWidth: 4
             }));
-            
+
             self.eText = new Kinetic.Text({
                 text: 'e = 0.1'
                 ,x: 0
                 ,y: 16
-                ,width: dim( 100 )
+                ,width: ( 100 )
                 ,stroke: colors.greyDark
                 ,strokeWidth: 1
                 ,fontFamily: '"latin-modern-mono-light", Courier, monospace'
@@ -352,10 +352,12 @@ define([
 
             var self = this
                 ,drag = false
+                ,startAgain = false
                 ;
 
             self.earth.on('mousedown touchstart', function( e ){
                 e.evt.preventDefault();
+                startAgain = self.anim.isRunning();
                 // stop the anim
                 self.stop();
                 drag = true;
@@ -378,7 +380,9 @@ define([
                 }
             });
             self.stage.on('contentMouseup contentTouchend', function( e ){
-                self.start();
+                if ( startAgain ) {
+                    self.start();
+                }
                 drag = false;
             });
 
