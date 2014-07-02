@@ -14,6 +14,29 @@ html, body, #wrap-outer {
 //     border: 1px solid $grey;
 // }
 
+.iconstyles {
+    font-family: 'mediaicons';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.fillscreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+}
+
 .wrap {
     width: 100%;
     max-width: 800px;
@@ -22,9 +45,100 @@ html, body, #wrap-outer {
 }
 
 #viewport {
-    padding: 4em 0;
+    @extend .fillscreen;
     background: #000 image-url('sky.png');
     background-size: 1000px;
+}
+
+.welcome {
+    margin-top: 180px;
+    text-align: center;
+
+    h2 {
+        color: $grey-light
+    }
+
+    .giant-play {
+        @extend .iconstyles;
+        @extend .icon-play;
+        font-size: 200px;
+        color: $grey-light;
+        text-decoration: none;
+        &:hover {
+            color: $blue;
+        }
+    }
+}
+
+#media-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.slide-controls {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 80px;
+    height: 0;
+    z-index: 10;
+    text-align: right;
+
+    > a {
+        position: absolute;
+        bottom: 10px;
+        font-size: 1.5em;
+        text-decoration: none;
+        color: $deep-grey-light;
+        @include text-shadow( 0 0 10px rgba(0,0,0,0.5));
+
+        &:hover {
+            color: $grey-light;
+        }
+
+        &.glow {
+            color: $yellow-dark;
+        }
+
+        &:after,
+        &:before {
+            margin: 0 10px;
+            width: 1em;
+            height: 1em;
+            font-size: 80px;
+            display: inline-block;
+            vertical-align: middle;
+
+            @extend .iconstyles;
+        }
+
+        &.next {
+            right: 0;
+            &:after {
+                @extend .icon-forward:before;
+            }
+        }
+
+        &.prev {
+            left: 0;
+            &:before {
+                @extend .icon-rewind:before;
+            }
+        }
+    }
+}
+
+.slides {
+    @extend .fillscreen;
+    top: 100%;
+    z-index: 1;
+
+    > section {
+
+    }
 }
 
 #stellar-solar-sim {

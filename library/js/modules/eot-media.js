@@ -66,6 +66,10 @@ define([
 
                 self.tracks[i] = m;
 
+                m.on('ended', function(){
+                    self.emit('ended', m);
+                });
+
                 m.on('canplayall', function(){
                     dfd.resolve( m );
                 });
@@ -82,9 +86,10 @@ define([
                 ,track
                 ;
 
+            self.emit('pause');
+            
             if ( idx >= 0 && idx < self.tracks.length ){
                 track = self.tracks[ i ];
-                track.pause();
                 track.off('timeupdate', self.timeUpdateCallback);
 
                 self.currentTrack = idx;
@@ -99,17 +104,16 @@ define([
 
             var self = this
                 ,el = $(id)
-                ,playing = false
                 ,playBtn = $('<a href="#">').addClass('play').attr('title', 'play').appendTo( el )
                 ,seek = $('<div>').addClass('seek').appendTo( el )
                 ,volume = $('<div>').addClass('volume').appendTo( el )
                 ;
 
+            self.playing = false;
+
             el.hammer().on('touch', '.play', function( e ){
                 e.preventDefault();
-                playing = !playing;
-                el.toggleClass('playing', playing);
-                self.emit(playing ? 'play' : 'pause');
+                self.emit(self.playing ? 'pause' : 'play');
             });
 
             seek.noUiSlider({
@@ -137,14 +141,27 @@ define([
             });
 
             seek.on('slide', function(){
-                if ( playing ){
+                if ( self.playing ){
                     self.emit('pause');
+                    self.playing = true;
                 }
                 self.emit('seek', seek.val() / 100);
             }).on('set', function(){
-                if ( playing ){
+                if ( self.playing ){
                     self.emit('play');
                 }
+            });
+
+            self.on('ended', function(){
+                self.emit('pause');
+            });
+
+            self.on('play', function(){
+                self.playing = true;
+                el.toggleClass('playing', true);
+            }).on('pause', function(){
+                self.playing = false;
+                el.toggleClass('playing', false);
             });
 
             volume.on('slide', function(){

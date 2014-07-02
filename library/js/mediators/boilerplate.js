@@ -1,6 +1,9 @@
 define([
     'jquery',
+    'hammer.jquery',
     'moddef',
+    'when',
+    'util/helpers',
     'modules/eot-media',
     'modules/stellar-solar-sim',
     'modules/eccentric-orbit-sim',
@@ -10,7 +13,10 @@ define([
     'modules/eot-map'
 ], function(
     $,
+    _jqhmr,
     M,
+    when,
+    Helpers,
     EOTMedia,
     StellarSolarSim,
     EccentricOrbitSim,
@@ -49,14 +55,63 @@ define([
                     '#media-sim1'
                 ]
             });
-            self.media.after('ready', function(){
-                console.log('blah');
-            });
 
             $(function(){
                 self.onDomReady();
                 self.resolve('domready');
             });
+        }
+
+        ,initSlides: function(){
+
+            var self = this
+                ,slides = $('.slides > section')
+                ,controls = $('<div>').addClass('slide-controls').appendTo('#viewport')
+                ;
+
+            controls.append('<a href="#" class="prev">back</a><a href="#" class="next">continue</a>');
+            controls.hammer().on('touch', 'a', function( e ){
+                e.preventDefault();
+                var $this = $(this);
+                if ( $this.hasClass('next') ){
+                    self.emit('slide', self.currentSlide + 1);
+                } else {
+                    self.emit('slide', self.currentSlide - 1);
+                }
+            });
+
+            self.currentSlide = 0;
+            slides.hide();
+
+
+            self.on('slide', function( e, idx ){
+                if ( idx >= 0 && idx < slides.length ){
+                    if ( idx < 2 ){
+                        controls.find('.prev').fadeOut();
+                    } else {
+                        controls.find('.prev').fadeIn();
+                    }
+
+                    if ( idx === (slides.length - 1) || idx === 0 ){
+                        controls.find('.next').fadeOut();
+                    } else {
+                        controls.find('.next').fadeIn();
+                    }
+
+                    controls.children().removeClass('glow');
+                    slides.eq( self.currentSlide ).fadeOut(function(){
+                        slides.eq( idx ).fadeIn();
+                    });
+                    self.currentSlide = idx;
+                }
+            });
+
+            self.media.on('ended', function(){
+                controls.find('.next').addClass('glow');
+            });
+
+            self.emit('slide', 0);
+            self.slides = slides;
         }
 
         // Initialize events
@@ -72,8 +127,62 @@ define([
 
             this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
             this.sims.stellarSolar.after('ready', function(){
-                // self.sims.stellarSolar.start();
+                self.sims.stellarSolar.start();
             });
+
+            self.on('slide', function( e, idx ){
+                self.media.setTrack( idx - 1 );
+            });
+
+            self.media.after('ready', function(){
+                var track = self.media.tracks[0];
+                var sim = self.sims.stellarSolar;
+                track.on('play', function(){
+                    sim.stop();
+                }).code({
+                    start: 0
+                    ,end: 15
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            sim.setDay( Helpers.lerp(0, 6, t/d) );
+                            sim.layer.draw();
+                        }
+                    }
+                }).code({
+                    start: 17
+                    ,end: 19
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            sim.setDay( Helpers.lerp(0, 1, t/d) );
+                            sim.layer.draw();
+                        }
+                    }
+                }).code({
+                    start: 21
+                    ,end: 22
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            sim.setDay( Helpers.lerp(1, 1+1/5, t/d) );
+                            sim.layer.draw();
+                        }
+                    }
+                }).code({
+                    start: 27
+                    ,onStart: function( e ){
+                        sim.start();
+                    }
+                });
+            });
+
 
             this.sims.eccentricOrbit = EccentricOrbitSim('#eccentric-orbit-sim');
             this.sims.eccentricOrbit.after('ready', function(){
@@ -146,6 +255,31 @@ define([
                 self.sims.eotPlot.setMarker( day / self.sims.axialTilt.daysPerYear );
             });
             setEotFn( self.sims.axialTilt.tilt );
+
+            when.all($.map(this.sims, function( s ){
+                return s.after('ready');
+            })).then(function(){
+                self.initSlides();
+                $('.slides').css('top', '0');
+            }).otherwise(function(){
+                window.console && console.log(arguments);
+            });
+
+            function firstplay( e ){
+                self.resolve('welcome');
+            }
+
+            self.media.on('play', firstplay);
+
+            $('.welcome .giant-play').hammer().on('touch', function(){
+                self.resolve('welcome');
+            });
+
+            self.after('welcome').then(function(){
+                self.media.off('play', firstplay);
+                self.emit('slide', 1);
+                self.media.emit('play');
+            });
         }
 
     }, ['events']);

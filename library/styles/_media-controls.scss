@@ -1,8 +1,9 @@
 
 #media-controls {
-    margin: 2em auto;
+
+    @include box-sizing( border-box );
     padding: 20px;
-    height: 40px;
+    height: 76px;
     background: rgba(255, 255, 255, 0.15);
 
     .ctrl {
@@ -42,7 +43,8 @@
         position: relative;
         top: 5px;
         float: right;
-        width: 120px;
+        width: 115px;
+        margin-right: 5px;
         height: 10px;
         background: $yellow-dark;
 

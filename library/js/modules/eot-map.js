@@ -130,6 +130,7 @@ define([
                 self.setDay( 0 );
                 self.layer.draw();
             });
+            self.resolve('ready');
         }
 
         ,plot: function( fn, resolution ){
