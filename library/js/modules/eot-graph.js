@@ -40,16 +40,38 @@ define([
 
             self.stage = stage;
 
+            // vars
+            self.offsetY = 0;//dim( 300 );
+            self.posColor = colors.yellow;
+            self.negColor = colors.red;
+
+            self.setup();
+            self.initEvents();
+
+            // self.initAnim();
+            self.after('ready', function(){
+                self.setDay( 0 );
+                self.layer.draw();
+            });
+
+            self.resolve('ready');
+        }
+
+        ,setup: function(){
+            var self = this
+                ,stage = self.stage
+                ;
+
+            stage.destroyChildren();
+            stage.width( self.$el.width() );
+            stage.height( self.$el.height() );
+
             function dim( r, useY ){
                 return r/600*( useY ? self.$el.height() : self.$el.width() );
             }
 
-            // vars
             self.scaleX = dim( 580, 1 );
             self.scaleY = dim( 280 );
-            self.offsetY = 0;//dim( 300 );
-            self.posColor = colors.yellow;
-            self.negColor = colors.red;
 
             // init simulation
             var layer = new Kinetic.Layer({
@@ -74,15 +96,6 @@ define([
             stage.add(layer);
 
             self.layer = layer;
-
-            self.initEvents();
-            // self.initAnim();
-            self.after('ready', function(){
-                self.setDay( 0 );
-                self.layer.draw();
-            });
-
-            self.resolve('ready');
         }
 
         ,newLine: function(){
@@ -126,6 +139,8 @@ define([
                 for ( x; x < 1; x += resolution ){
 
                     y = fn( x );
+                    // make sure that nearly zero is zero
+                    y = Math.abs(y) < 1e-6 ? 0 : y;
 
                     // both negative or positive
                     if ( py*y > 0 || py === 0 ){

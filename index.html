@@ -10,41 +10,77 @@ layout: default
 
 <div class="slides">
 
-    <section class="welcome">
-        <h2>Welcome page</h2>
-        <a href="#" class="giant-play"></a>
-    </section>
-
-    <section class="wrap">
-        <div id="stellar-solar-sim">
+    <section class="welcome hv-container">
+        <div class="content">
+            <h2>Welcome page</h2>
+            <a href="#" class="giant-play"></a>
         </div>
     </section>
 
-    <section class="wrap">
-        <div id="eccentric-orbit-sim">
-        </div>
-
-        <div id="eccentric-orbit-plot">
+    <section class="hv-container">
+        <div id="stellar-solar-sim" class="content">
         </div>
     </section>
 
-    <section class="wrap row">
-        <div id="axial-tilt-sim" class="column reset">
-        </div>
+    <section class="hv-container">
+        <div class="content wrap">
+            <div id="eccentric-orbit-sim">
+            </div>
 
-        <div id="ecliptic-tilt-sim" class="column reset">
+            <div id="eccentric-orbit-plot">
+            </div>
         </div>
-
-        <div id="axial-tilt-plot" class="column reset last">
-        </div>
-
-        <div id="axial-tilt-map" class="column reset">
-        </div>
-
     </section>
 
-    <section class="wrap">
-        <div id="eot-plot">
+    <section class="hv-container">
+        <div class="content">
+
+            <div class="row">
+                <div class="column half">
+                    <div id="axial-tilt-sim">
+                    </div>
+                </div>
+
+                <div class="column half last">
+                    <div id="ecliptic-tilt-sim">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column nine axial-tilt-col">
+                    <div id="axial-tilt-map">
+                    </div>
+                </div>
+
+                <div class="column three last">
+                    <div id="axial-tilt-plot">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+    <section class="hv-container">
+        <div class="content">
+
+            <div class="row">
+                <div class="column half reset">
+                    <div id="ecc-ctrl">
+                    </div>
+
+                    <div id="axis-ctrl">
+                    </div>
+                </div>
+
+                <div class="column half reset last">
+                    <div id="eot-plot">
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 </div>

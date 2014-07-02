@@ -10,9 +10,36 @@ html, body, #wrap-outer {
     height: 100%;
 }
 
-// .kineticjs-content {
-//     border: 1px solid $grey;
-// }
+/* This parent can be any width and height */
+.hv-container,
+.h-container {
+  text-align: center;
+}
+
+/* The ghost, nudged to maintain perfect centering */
+.hv-container,
+.v-container {
+    height: 100%;
+
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      margin-right: -0.35em; /* Adjusts for spacing */
+    }
+}
+
+/* The element to be centered, can
+   also be of any width and height */
+.hv-container,
+.h-container,
+.v-container {
+    .content {
+      display: inline-block;
+      vertical-align: middle;
+    }
+}
 
 .iconstyles {
     font-family: 'mediaicons';
@@ -39,9 +66,8 @@ html, body, #wrap-outer {
 
 .wrap {
     width: 100%;
-    max-width: 800px;
     @include clearfix;
-    margin: 80px auto;
+    margin: 0 auto;
 }
 
 #viewport {
@@ -51,11 +77,10 @@ html, body, #wrap-outer {
 }
 
 .welcome {
-    margin-top: 180px;
-    text-align: center;
 
     h2 {
-        color: $grey-light
+        color: $grey-light;
+        margin-top: -1em;
     }
 
     .giant-play {
@@ -133,11 +158,17 @@ html, body, #wrap-outer {
 
 .slides {
     @extend .fillscreen;
+    bottom: 76px;
     top: 100%;
     z-index: 1;
 
-    > section {
+    h1, h2, h3, h4, h5, h6 {
+        font-family: $font-family-mono-light;
+    }
 
+    .content {
+        width: 92%;
+        max-width: 760px;
     }
 }
 
@@ -152,9 +183,8 @@ html, body, #wrap-outer {
     z-index: 2;
     float: left;
     width: 80%;
-    max-width: 600px;
     height: 600px;
-    margin-top: 2em;
+    margin: 4em 1em 0 -1em;
 }
 
 #eccentric-orbit-plot,
@@ -163,16 +193,17 @@ html, body, #wrap-outer {
     position: relative;
     float: left;
     width: 20%;
-    margin-top: 2em;
-    max-width: 200px;
     height: 600px;
+    margin: 2em 0;
+    font: 2em $font-family-mono-light;
+    @include text-shadow( 0 0 10px rgba(0,0,0,0.5));
 
     &:before {
         content: 'late';
         position: absolute;
         top: 1em;
         left: 50%;
-        margin-left: -5em;
+        margin-left: -4em;
         z-index: 2;
         color: $grey;
     }
@@ -182,7 +213,7 @@ html, body, #wrap-outer {
         position: absolute;
         top: 1em;
         right: 50%;
-        margin-right: -5em;
+        margin-right: -4em;
         z-index: 2;
         color: $grey;
     }
@@ -190,7 +221,7 @@ html, body, #wrap-outer {
     > div:after {
         content: 'mean';
         position: absolute;
-        top: -2em;
+        top: -1.5em;
         left: 50%;
         margin-left: -1em;
         color: $grey;
@@ -204,16 +235,31 @@ html, body, #wrap-outer {
 }
 
 #axial-tilt-plot {
-    float: right;
+    width: 100%;
+    height: 300px;
+    font-size: 1em;
+    margin: 2em auto;
 }
 
-#axial-tilt-map {
+.axial-tilt-col {
     $r: 1280/720;
-    width: 600px;
-    height: (600px / $r);
-    max-width: 600px;
-    background: $deep-grey-dark image-url('map-4.png') no-repeat 0 0;
+    position: relative;
+
+    &:before {
+        content: '';
+        display: block;
+        padding-top: 100%/$r;
+    }
+}
+#axial-tilt-map {
+    position: absolute;
+    top: 2em;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $deep-grey-dark image-url('map-4b.png') no-repeat 0 0;
     background-size: 100%;
+    border: 1px solid $deep-grey-dark;
 }
 
 #axial-tilt-sim,
@@ -221,4 +267,20 @@ html, body, #wrap-outer {
     margin-top: 2em;
     width: 300px;
     height: 300px;
+}
+
+
+#ecc-ctrl,
+#axis-ctrl {
+    float: left;
+    width: 400px;
+    height: 400px;
+}
+
+#axis-ctrl {
+    margin-top: -40px;
+}
+
+#eot-plot {
+    width: 100%;
 }

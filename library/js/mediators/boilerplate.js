@@ -76,7 +76,9 @@ define([
                 if ( $this.hasClass('next') ){
                     self.emit('slide', self.currentSlide + 1);
                 } else {
-                    self.emit('slide', self.currentSlide - 1);
+                    if ( self.currentSlide > 1 ){
+                        self.emit('slide', self.currentSlide - 1);
+                    }
                 }
             });
 
@@ -99,6 +101,7 @@ define([
                     }
 
                     controls.children().removeClass('glow');
+                    slides.not(':eq('+self.currentSlide+'),:eq('+idx+')').stop().hide();
                     slides.eq( self.currentSlide ).fadeOut(function(){
                         slides.eq( idx ).fadeIn();
                     });
@@ -118,6 +121,10 @@ define([
         ,initEvents: function(){
 
             var self = this;
+
+            $(window).on('resize', function(){
+                self.emit('resize');
+            });
         }
 
         // DomReady Callback
@@ -125,14 +132,13 @@ define([
 
             var self = this;
 
-            this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
-            this.sims.stellarSolar.after('ready', function(){
-                self.sims.stellarSolar.start();
-            });
-
             self.on('slide', function( e, idx ){
                 self.media.setTrack( idx - 1 );
             });
+
+            ///////////
+            // Slide 1
+            this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
 
             self.media.after('ready', function(){
                 var track = self.media.tracks[0];
@@ -183,29 +189,25 @@ define([
                 });
             });
 
-
+            ///////////
+            // Slide 2
             this.sims.eccentricOrbit = EccentricOrbitSim('#eccentric-orbit-sim');
-            this.sims.eccentricOrbit.after('ready', function(){
-                // self.sims.eccentricOrbit.start();
-            });
 
             this.sims.eccentricOrbitPlot = EOTGraph('#eccentric-orbit-plot');
-            this.sims.eccentricOrbitPlot.scaleY *= 1;
+            this.sims.eccentricOrbitPlot.scaleY *= 0.9;
             this.sims.eccentricOrbit.on('change:eccentricity', function(){
                 self.sims.eccentricOrbitPlot.plot( function(x){
                     return self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );
                 }, 0.01);
             });
-            this.sims.eccentricOrbit.emit('change:eccentricity', this.sims.eccentricOrbit.e);
 
             this.sims.eccentricOrbit.on('change', function( e, data ){
                 self.sims.eccentricOrbitPlot.setMarker( data.day / self.sims.eccentricOrbit.daysPerYear );
             });
 
+            //////////
+            // Slide 3
             this.sims.axialTilt = AxialTiltSim('#axial-tilt-sim');
-            this.sims.axialTilt.after('ready', function(){
-                self.sims.axialTilt.start();
-            });
 
             this.sims.eclipticTilt = EclipticTiltSim('#ecliptic-tilt-sim');
             this.sims.axialTilt.on('change:tilt', function( e, tilt ){
@@ -235,26 +237,37 @@ define([
                 self.sims.axialTiltMap.setDay( day );
             });
 
-            this.sims.axialTilt.emit('change:tilt', this.sims.axialTilt.tilt);
+            /////////////
+            // Slide 4
+            var year = 365.24;
+            var vernal = 79 + 17/24;
+            var perihelion = 3 + 14.5/24;
+            this.sims.eccCtrl = EccentricOrbitSim('#ecc-ctrl');
+            this.sims.axisCtrl = AxialTiltSim('#axis-ctrl');
 
-            // eot plot
             this.sims.eotPlot = EOTGraph('#eot-plot');
-            this.sims.eotPlot.scaleY *= 10;
+            this.sims.eotPlot.scaleY = 400;
             function setEotFn( tilt ){
                 self.sims.eotPlot.plot( function( x ){
-                    return calcEOTFromTilt( (x - 76/365) * Pi2, tilt ) + self.sims.eccentricOrbit.calcEOTAngle( x * self.sims.eccentricOrbit.daysPerYear );;
+                    return calcEOTFromTilt( (x + perihelion/year - vernal/year) * Pi2, tilt ) + self.sims.eccCtrl.calcEOTAngle( x * self.sims.eccCtrl.daysPerYear );
                 }, 0.01);
             }
-            this.sims.axialTilt.on('change:tilt', function( e, tilt ){
+            this.sims.axisCtrl.on('change:tilt', function( e, tilt ){
                 setEotFn( tilt );
             });
-            this.sims.eccentricOrbit.on('change:eccentricity', function(){
-                setEotFn( self.sims.axialTilt.tilt );
+            this.sims.eccCtrl.on('change:eccentricity', function(){
+                setEotFn( self.sims.axisCtrl.tilt );
             });
-            this.sims.axialTilt.on('change:day', function( e, day ){
-                self.sims.eotPlot.setMarker( day / self.sims.axialTilt.daysPerYear );
+            this.sims.eccCtrl.on('change', function( e, data ){
+                var x = (data.day / self.sims.eccCtrl.daysPerYear);
+                self.sims.eotPlot.setMarker( x );
+                self.sims.axisCtrl.setDay( x * self.sims.axisCtrl.daysPerYear );
+                self.sims.axisCtrl.layer.draw();
             });
-            setEotFn( self.sims.axialTilt.tilt );
+            setEotFn( self.sims.axisCtrl.tilt );
+
+            //////////////
+            // General
 
             when.all($.map(this.sims, function( s ){
                 return s.after('ready');
@@ -271,7 +284,8 @@ define([
 
             self.media.on('play', firstplay);
 
-            $('.welcome .giant-play').hammer().on('touch', function(){
+            $('.welcome .giant-play').hammer().on('touch', function( e ){
+                e.preventDefault();
                 self.resolve('welcome');
             });
 
@@ -280,6 +294,36 @@ define([
                 self.emit('slide', 1);
                 self.media.emit('play');
             });
+
+            /////////////
+            // Resizing
+            this.sims.eccentricOrbit.emit('change:eccentricity', this.sims.eccentricOrbit.e);
+            this.sims.axialTilt.emit('change:tilt', this.sims.axialTilt.tilt);
+
+            self.on('resize', Helpers.debounce(function(){
+                $.each(self.sims, function(name, sim){
+                    if ( sim.setup ){
+                        var par = sim.$el.parents('.slides > section');
+                        var vis = par.is(':visible');
+
+                        if ( !vis ){
+                            par.show();
+                        }
+
+                        sim.setup();
+
+                        if ( !vis ){
+                            par.hide();
+                        }
+                    }
+                });
+
+                self.sims.eccentricOrbit.emit('change:eccentricity', self.sims.eccentricOrbit.e);
+                self.sims.axialTilt.emit('change:tilt', self.sims.axialTilt.tilt);
+                self.sims.eotPlot.scaleY = 400;
+                setEotFn( self.sims.axisCtrl.tilt );
+
+            }, 1000));
         }
 
     }, ['events']);
