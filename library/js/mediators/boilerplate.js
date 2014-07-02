@@ -76,7 +76,9 @@ define([
                 if ( $this.hasClass('next') ){
                     self.emit('slide', self.currentSlide + 1);
                 } else {
-                    self.emit('slide', self.currentSlide - 1);
+                    if ( self.currentSlide > 1 ){
+                        self.emit('slide', self.currentSlide - 1);
+                    }
                 }
             });
 
@@ -99,6 +101,7 @@ define([
                     }
 
                     controls.children().removeClass('glow');
+                    slides.not(':eq('+self.currentSlide+'),:eq('+idx+')').stop().hide();
                     slides.eq( self.currentSlide ).fadeOut(function(){
                         slides.eq( idx ).fadeIn();
                     });
@@ -271,7 +274,8 @@ define([
 
             self.media.on('play', firstplay);
 
-            $('.welcome .giant-play').hammer().on('touch', function(){
+            $('.welcome .giant-play').hammer().on('touch', function( e ){
+                e.preventDefault();
                 self.resolve('welcome');
             });
 
