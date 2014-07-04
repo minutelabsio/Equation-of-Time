@@ -18,7 +18,7 @@ define([
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
 
-    var primeMeridianRatio = 580/1280;
+    var primeMeridianRatio = 0.5;//580/1280;
     function calcDecFromTilt( ang, tilt ){
         var d = Math.asin( Math.sin( ang ) * Math.sin( tilt / deg ) );
 

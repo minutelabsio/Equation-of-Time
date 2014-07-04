@@ -184,7 +184,7 @@ html, body, #wrap-outer {
     float: left;
     width: 80%;
     height: 600px;
-    margin: 4em 1em 0 -1em;
+    margin: 35px 1em 0 -1em;
 }
 
 #eccentric-orbit-plot,
@@ -193,38 +193,48 @@ html, body, #wrap-outer {
     position: relative;
     float: left;
     width: 20%;
-    height: 600px;
-    margin: 2em 0;
+    height: 500px;
+    margin: 90px 0;
     font: 2em $font-family-mono-light;
-    @include text-shadow( 0 0 10px rgba(0,0,0,0.5));
+    @include text-shadow( 0 0 10px rgba(0,0,0,1));
 
     &:before {
         content: 'late';
         position: absolute;
-        top: 1em;
+        top: 0em;
         left: 50%;
         margin-left: -4em;
         z-index: 2;
         color: $grey;
+        padding-top: 85px;
+        background: image-url('time-past-noon-feather.png') no-repeat top center;
+        background-size: 70px;
     }
 
     &:after {
         content: 'early';
         position: absolute;
-        top: 1em;
+        top: 0em;
         right: 50%;
         margin-right: -4em;
         z-index: 2;
         color: $grey;
+        padding-top: 85px;
+        background: image-url('time-before-noon-feather.png') no-repeat top center;
+        background-size: 70px;
     }
 
     > div:after {
-        content: 'mean';
+        content: '';
         position: absolute;
-        top: -1.5em;
+        top: -90px;
         left: 50%;
-        margin-left: -1em;
+        margin-left: -35px;
         color: $grey;
+        width: 70px;
+        height: 90px;
+        background: image-url('time-noon-feather.png') no-repeat top center;
+        background-size: 70px;
     }
 }
 
@@ -239,6 +249,24 @@ html, body, #wrap-outer {
     height: 300px;
     font-size: 1em;
     margin: 2em auto;
+
+    &:after,
+    &:before,
+    > div:after {
+        background-size: 35px;
+    }
+
+    &:after,
+    &:before {
+        padding-top: 42px;
+    }
+
+    > div:after {
+        width: 35px;
+        height: 45px;
+        top: -50px;
+        margin-left: -18px;
+    }
 }
 
 .axial-tilt-col {
@@ -257,9 +285,43 @@ html, body, #wrap-outer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: $deep-grey-dark image-url('map-4b.png') no-repeat 0 0;
+    background: $deep-grey-dark image-url('map-4b.png') repeat-x 24px 0;
     background-size: 100%;
     border: 1px solid $deep-grey-dark;
+}
+
+#axial-tilt-map-dates {
+    $r: 1280/720;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    font-family: $font-family-mono-light;
+
+    li {
+        float: left;
+        text-indent: 0;
+        display: inline-block;
+        width: (100%/12);
+        text-align: center;
+        color: $deep-grey-light;
+        border-right: 1px solid $deep-grey-light;
+        @include text-shadow( 0 0 10px rgba(0,0,0,1));
+        @include box-sizing( border-box );
+        &:first-child {
+            border-left: 1px solid $deep-grey-light;
+        }
+    }
+
+    // &:before {
+    //     content: '';
+    //     display: block;
+    //     float: left;
+    //     width: 50%;
+    //     height: 1px;
+    // }
 }
 
 #axial-tilt-sim,
@@ -283,4 +345,5 @@ html, body, #wrap-outer {
 
 #eot-plot {
     width: 100%;
+    margin-top: 140px;
 }

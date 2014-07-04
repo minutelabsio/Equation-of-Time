@@ -52,7 +52,10 @@ define([
             self.media = EOTMedia({
                 controls: '#media-controls'
                 ,tracks: [
-                    '#media-sim1'
+                    '../../media/stellar-v-solar'
+                    ,'../../media/test'
+                    ,'../../media/test'
+                    ,'../../media/test'
                 ]
             });
 
@@ -100,17 +103,22 @@ define([
                         controls.find('.next').fadeIn();
                     }
 
-                    controls.children().removeClass('glow');
+                    controls.hide();
+                    controls.children('.next').removeClass('glow').text('skip');
                     slides.not(':eq('+self.currentSlide+'),:eq('+idx+')').stop().hide();
                     slides.eq( self.currentSlide ).fadeOut(function(){
                         slides.eq( idx ).fadeIn();
                     });
                     self.currentSlide = idx;
+                    // delay showing next button
+                    setTimeout(function(){
+                        controls.fadeIn();
+                    }, 1000);
                 }
             });
 
             self.media.on('ended', function(){
-                controls.find('.next').addClass('glow');
+                controls.find('.next').addClass('glow').text('continue');
             });
 
             self.emit('slide', 0);
@@ -139,6 +147,12 @@ define([
             ///////////
             // Slide 1
             this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
+
+            self.on('slide', function( e, idx ){
+                if ( idx !== 1 ){
+                    self.sims.stellarSolar.stop();
+                }
+            });
 
             self.media.after('ready', function(){
                 var track = self.media.tracks[0];
@@ -193,6 +207,12 @@ define([
             // Slide 2
             this.sims.eccentricOrbit = EccentricOrbitSim('#eccentric-orbit-sim');
 
+            self.on('slide', function( e, idx ){
+                if ( idx !== 2 ){
+                    self.sims.eccentricOrbit.stop();
+                }
+            });
+
             this.sims.eccentricOrbitPlot = EOTGraph('#eccentric-orbit-plot');
             this.sims.eccentricOrbitPlot.scaleY *= 0.9;
             this.sims.eccentricOrbit.on('change:eccentricity', function(){
@@ -205,9 +225,38 @@ define([
                 self.sims.eccentricOrbitPlot.setMarker( data.day / self.sims.eccentricOrbit.daysPerYear );
             });
 
+            self.media.after('ready', function(){
+                var track = self.media.tracks[1];
+                var sim = self.sims.eccentricOrbit;
+                track.on('play', function(){
+                    sim.stop();
+                }).code({
+                    start: 0
+                    ,end: track.duration()
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            sim.setDay( Helpers.lerp(0, 60, t/d) );
+                            sim.layer.draw();
+                        }
+                    }
+                    ,onEnd: function( e ){
+                        sim.start();
+                    }
+                });
+            });
+
             //////////
             // Slide 3
             this.sims.axialTilt = AxialTiltSim('#axial-tilt-sim');
+
+            self.on('slide', function( e, idx ){
+                if ( idx !== 3 ){
+                    self.sims.axialTilt.stop();
+                }
+            });
 
             this.sims.eclipticTilt = EclipticTiltSim('#ecliptic-tilt-sim');
             this.sims.axialTilt.on('change:tilt', function( e, tilt ){
@@ -237,6 +286,39 @@ define([
                 self.sims.axialTiltMap.setDay( day );
             });
 
+            // map move
+            var mapPos;
+            this.sims.axialTiltMap.$el.hammer()
+                .on('dragstart', function(){
+                    mapPos = parseInt($(this).css('background-position-x'));
+                })
+                .on('drag', function( e ){
+                    this.style.backgroundPosition = (mapPos + e.gesture.deltaX)+ 'px 0';
+                });
+
+            self.media.after('ready', function(){
+                var track = self.media.tracks[2];
+                var sim = self.sims.axialTilt;
+                track.on('play', function(){
+                    sim.stop();
+                }).code({
+                    start: 0
+                    ,end: track.duration()
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            sim.setDay( Helpers.lerp(0, 6000, t/d) );
+                            sim.layer.draw();
+                        }
+                    }
+                    ,onEnd: function( e ){
+                        sim.start();
+                    }
+                });
+            });
+
             /////////////
             // Slide 4
             var year = 365.24;
@@ -244,6 +326,12 @@ define([
             var perihelion = 3 + 14.5/24;
             this.sims.eccCtrl = EccentricOrbitSim('#ecc-ctrl');
             this.sims.axisCtrl = AxialTiltSim('#axis-ctrl');
+
+            self.on('slide', function( e, idx ){
+                if ( idx !== 4 ){
+                    self.sims.eccCtrl.stop();
+                }
+            });
 
             this.sims.eotPlot = EOTGraph('#eot-plot');
             this.sims.eotPlot.scaleY = 400;
@@ -265,6 +353,29 @@ define([
                 self.sims.axisCtrl.layer.draw();
             });
             setEotFn( self.sims.axisCtrl.tilt );
+
+            self.media.after('ready', function(){
+                var track = self.media.tracks[3];
+                var sim = self.sims.eccCtrl;
+                track.on('play', function(){
+                    sim.stop();
+                }).code({
+                    start: 0
+                    ,end: track.duration()
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            sim.setDay( Helpers.lerp(0, 60, t/d) );
+                            sim.layer.draw();
+                        }
+                    }
+                    ,onEnd: function( e ){
+                        sim.start();
+                    }
+                });
+            });
 
             //////////////
             // General
@@ -291,8 +402,11 @@ define([
 
             self.after('welcome').then(function(){
                 self.media.off('play', firstplay);
+                self.on('slide', function(){
+                    self.media.emit('play');
+                });
+
                 self.emit('slide', 1);
-                self.media.emit('play');
             });
 
             /////////////
@@ -320,6 +434,8 @@ define([
 
                 self.sims.eccentricOrbit.emit('change:eccentricity', self.sims.eccentricOrbit.e);
                 self.sims.axialTilt.emit('change:tilt', self.sims.axialTilt.tilt);
+                self.sims.eccentricOrbitPlot.scaleY *= 0.9;
+                self.sims.axialTiltPlot.scaleY *= 10;
                 self.sims.eotPlot.scaleY = 400;
                 setEotFn( self.sims.axisCtrl.tilt );
 

@@ -622,7 +622,7 @@ html, body, #wrap-outer {
   float: left;
   width: 80%;
   height: 600px;
-  margin: 4em 1em 0 -1em;
+  margin: 35px 1em 0 -1em;
 }
 
 /* line 192, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
@@ -632,10 +632,10 @@ html, body, #wrap-outer {
   position: relative;
   float: left;
   width: 20%;
-  height: 600px;
-  margin: 2em 0;
+  height: 500px;
+  margin: 90px 0;
   font: 2em "latin-modern-mono-light", Courier, monospace;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 10px black;
 }
 /* line 201, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot:before,
@@ -643,75 +643,130 @@ html, body, #wrap-outer {
 #eot-plot:before {
   content: 'late';
   position: absolute;
-  top: 1em;
+  top: 0em;
   left: 50%;
   margin-left: -4em;
   z-index: 2;
   color: gainsboro;
+  padding-top: 85px;
+  background: url('../images/time-past-noon-feather.png?1404404424') no-repeat top center;
+  background-size: 70px;
 }
-/* line 211, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 214, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot:after,
 #axial-tilt-plot:after,
 #eot-plot:after {
   content: 'early';
   position: absolute;
-  top: 1em;
+  top: 0em;
   right: 50%;
   margin-right: -4em;
   z-index: 2;
   color: gainsboro;
+  padding-top: 85px;
+  background: url('../images/time-before-noon-feather.png?1404404663') no-repeat top center;
+  background-size: 70px;
 }
-/* line 221, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 227, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot > div:after,
 #axial-tilt-plot > div:after,
 #eot-plot > div:after {
-  content: 'mean';
+  content: '';
   position: absolute;
-  top: -1.5em;
+  top: -90px;
   left: 50%;
-  margin-left: -1em;
+  margin-left: -35px;
   color: gainsboro;
+  width: 70px;
+  height: 90px;
+  background: url('../images/time-noon-feather.png?1404403511') no-repeat top center;
+  background-size: 70px;
 }
 
-/* line 231, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 241, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eccentric-orbit-plot {
   width: 40%;
   max-width: 600px;
   margin-left: -20%;
 }
 
-/* line 237, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 247, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #axial-tilt-plot {
   width: 100%;
   height: 300px;
   font-size: 1em;
   margin: 2em auto;
 }
+/* line 255, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-plot:after, #axial-tilt-plot:before,
+#axial-tilt-plot > div:after {
+  background-size: 35px;
+}
+/* line 260, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-plot:after, #axial-tilt-plot:before {
+  padding-top: 42px;
+}
+/* line 264, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-plot > div:after {
+  width: 35px;
+  height: 45px;
+  top: -50px;
+  margin-left: -18px;
+}
 
-/* line 244, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 272, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 .axial-tilt-col {
   position: relative;
 }
-/* line 248, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 276, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 .axial-tilt-col:before {
   content: '';
   display: block;
   padding-top: 56.25%;
 }
 
-/* line 254, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 282, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #axial-tilt-map {
   position: absolute;
   top: 2em;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #1a1a1a url('../images/map-4b.png?1404335939') no-repeat 0 0;
+  background: #1a1a1a url('../images/map-4b.png?1404345537') repeat-x 24px 0;
   background-size: 100%;
   border: 1px solid #1a1a1a;
 }
 
-/* line 266, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 293, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-map-dates {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-family: "latin-modern-mono-light", Courier, monospace;
+}
+/* line 303, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-map-dates li {
+  float: left;
+  text-indent: 0;
+  display: inline-block;
+  width: 8.33333%;
+  text-align: center;
+  color: #626262;
+  border-right: 1px solid #626262;
+  text-shadow: 0 0 10px black;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* line 313, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+#axial-tilt-map-dates li:first-child {
+  border-left: 1px solid #626262;
+}
+
+/* line 328, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #axial-tilt-sim,
 #ecliptic-tilt-sim {
   margin-top: 2em;
@@ -719,7 +774,7 @@ html, body, #wrap-outer {
   height: 300px;
 }
 
-/* line 274, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 336, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #ecc-ctrl,
 #axis-ctrl {
   float: left;
@@ -727,12 +782,13 @@ html, body, #wrap-outer {
   height: 400px;
 }
 
-/* line 280, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 342, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #axis-ctrl {
   margin-top: -40px;
 }
 
-/* line 284, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 346, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eot-plot {
   width: 100%;
+  margin-top: 140px;
 }
