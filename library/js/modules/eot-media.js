@@ -1,4 +1,5 @@
 define([
+    'require',
     'jquery',
     'jquery.nouislider',
     'hammer.jquery',
@@ -7,6 +8,7 @@ define([
     'moddef',
     'when'
 ], function(
+    require,
     $,
     _noui,
     _hmr,
@@ -62,7 +64,8 @@ define([
                 ;
 
             $(function(){
-                m = Popcorn( id );
+                var el = $('<div>').appendTo('body').hide();
+                m = Popcorn.smart( el[0], [ require.toUrl(id+'.mp3'), require.toUrl(id+'.ogg') ] );
 
                 self.tracks[i] = m;
 
@@ -87,7 +90,7 @@ define([
                 ;
 
             self.emit('pause');
-            
+
             if ( idx >= 0 && idx < self.tracks.length ){
                 track = self.tracks[ i ];
                 track.off('timeupdate', self.timeUpdateCallback);
@@ -97,6 +100,7 @@ define([
                 track.volume( self.volume );
                 track.on('timeupdate', self.timeUpdateCallback);
                 track.currentTime( 0 );
+                self.timeUpdateCallback();
             }
         }
 
