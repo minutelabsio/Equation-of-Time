@@ -76,9 +76,10 @@ define([
             // init simulation
             var layer = new Kinetic.Layer({
                 scaleY: -1
+                ,scaleX: -1
                 ,rotation: 90
                 ,offset: {
-                    x: -10
+                    x: dim(600, 1)-10
                     ,y: -dim(300)
                 }
             });
