@@ -3,12 +3,14 @@ define([
     'jquery',
     'require',
     'kinetic',
+    'util/helpers',
     'moddef'
 ], function(
     colors,
     $,
     req,
     Kinetic,
+    Helpers,
     M
 ) {
     'use strict';
@@ -43,8 +45,8 @@ define([
             self.day = 0;
             self.tilt = 0;
             self.earthDist = dim(260);
-            self.posColor = colors.red;
-            self.negColor = colors.yellow;
+            self.posColor = Helpers.adjustAlpha(colors.red, 0.8);
+            self.negColor = Helpers.adjustAlpha(colors.yellow, 0.8);
             var offset = {
                 x: -dim( 300 )
                 ,y: -dim( 300 )
@@ -112,7 +114,7 @@ define([
                 ,radius: self.earthDist
                 ,rotation: 90
                 ,angle: 0
-                ,fill: colors.red
+                ,fill: self.posColor
             });
 
             layer.add( self.eotWedge );

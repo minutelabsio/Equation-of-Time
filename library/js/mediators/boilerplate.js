@@ -159,6 +159,8 @@ define([
                 var sim = self.sims.stellarSolar;
                 track.on('play', function(){
                     sim.stop();
+                }).on('pause', function(){
+                    sim.start();
                 }).code({
                     start: 0
                     ,end: 15
@@ -230,6 +232,8 @@ define([
                 var sim = self.sims.eccentricOrbit;
                 track.on('play', function(){
                     sim.stop();
+                }).on('pause', function(){
+                    sim.start();
                 }).code({
                     start: 0
                     ,end: track.duration()
@@ -301,6 +305,8 @@ define([
                 var sim = self.sims.axialTilt;
                 track.on('play', function(){
                     sim.stop();
+                }).on('pause', function(){
+                    sim.start();
                 }).code({
                     start: 0
                     ,end: track.duration()
@@ -359,6 +365,8 @@ define([
                 var sim = self.sims.eccCtrl;
                 track.on('play', function(){
                     sim.stop();
+                }).on('pause', function(){
+                    sim.start();
                 }).code({
                     start: 0
                     ,end: track.duration()
