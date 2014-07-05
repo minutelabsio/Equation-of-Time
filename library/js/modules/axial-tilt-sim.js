@@ -44,7 +44,7 @@ define([
             self.daysPerYear = 365;
             self.day = 0;
             self.earthDist = dim(240);
-            self.maxTilt = 30;
+            self.maxTilt = 90;
             self.tilt = 0;
             var offset = {
                 x: -dim( 300 )

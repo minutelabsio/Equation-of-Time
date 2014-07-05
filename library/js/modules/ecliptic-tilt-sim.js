@@ -3,12 +3,14 @@ define([
     'jquery',
     'require',
     'kinetic',
+    'util/helpers',
     'moddef'
 ], function(
     colors,
     $,
     req,
     Kinetic,
+    Helpers,
     M
 ) {
     'use strict';
@@ -43,8 +45,8 @@ define([
             self.day = 0;
             self.tilt = 0;
             self.earthDist = dim(260);
-            self.posColor = colors.red;
-            self.negColor = colors.yellow;
+            self.posColor = Helpers.adjustAlpha(colors.red, 0.8);
+            self.negColor = Helpers.adjustAlpha(colors.yellow, 0.8);
             var offset = {
                 x: -dim( 300 )
                 ,y: -dim( 300 )
@@ -76,6 +78,24 @@ define([
                 self.earthImg = earthImg;
                 earth.add(earthImg);
 
+                self.halfEarth = new Kinetic.Image({
+                    x: dim( 300 )
+                    ,y: dim( 300 )
+                    ,image: imageObj
+                    ,width: dim( r ) + 4
+                    ,height: dim( 2*r ) + 8
+                    ,offset: {
+                        x: dim( r ) + 5
+                        ,y: dim( r ) + 4
+                    }
+                    ,crop: {
+                        x: 0
+                        ,y: 0
+                        ,width: 150
+                        ,height: 300
+                    }
+                });
+
                 self.resolve('ready');
             };
             imageObj.src = earthAbove;
@@ -104,15 +124,13 @@ define([
                 ,strokeWidth: 1
             });
 
-            layer.add( self.ecliptic );
-
             self.eotWedge = new Kinetic.Wedge({
                 x: -offset.x
                 ,y: -offset.y
                 ,radius: self.earthDist
                 ,rotation: 90
                 ,angle: 0
-                ,fill: colors.red
+                ,fill: self.posColor
             });
 
             layer.add( self.eotWedge );
@@ -161,6 +179,7 @@ define([
             }));
 
             layer.add(earth);
+            layer.add( self.ecliptic );
             layer.add(self.sun);
             layer.add(self.meanSun);
 
@@ -172,6 +191,8 @@ define([
             self.initAnim();
             self.after('ready', function(){
                 self.setDay( 0 );
+                self.earth.setZIndex( 3 );
+                self.layer.add( self.halfEarth );
                 self.layer.draw();
             });
         }
@@ -226,6 +247,11 @@ define([
 
             s = 1 + 0.5 * Math.cos(ang) * Math.sin( self.tilt / deg );
 
+            if ( s > 1 ){
+                sun.setZIndex(10);
+            } else {
+                sun.setZIndex(2);
+            }
             sun.getChildren().each(function( n ){
                 n.scaleX(s);
                 n.scaleY(s);
@@ -244,6 +270,17 @@ define([
         }
 
         ,setTilt: function( degrees ){
+
+            if ( this.halfEarth && degrees*this.tilt <= 0 ){
+                if ( degrees >= 0 ){
+                    this.halfEarth.cropX( 0 );
+                    this.halfEarth.offsetX( this.halfEarth.width() + 1 );
+                } else {
+                    this.halfEarth.cropX( 150 );
+                    this.halfEarth.offsetX( 1 );
+                }
+            }
+
             this.tilt = degrees;
             this.recalc();
         }
@@ -253,7 +290,7 @@ define([
                 ,tilt = self.tilt
                 ;
 
-            self.ecliptic.radiusX( self.earthDist * Math.abs(Math.cos( tilt / deg )) );
+            self.ecliptic.radiusX( Math.max(self.earthDist * Math.abs(Math.cos( tilt / deg )), 1) );
             self.layer.draw();
         }
 
