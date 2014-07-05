@@ -3,12 +3,14 @@ define([
     'jquery',
     'require',
     'kinetic',
+    'util/helpers',
     'moddef'
 ], function(
     colors,
     $,
     req,
     Kinetic,
+    Helpers,
     M
 ) {
     'use strict';
@@ -106,6 +108,36 @@ define([
 
             earth.add( this.eotWedge );
 
+            self.meanSun = new Kinetic.Circle({
+                radius: dim( 30 )
+                ,x: 0
+                ,y: 0
+                ,offset: {
+                    x: self.minorAxis
+                    ,y: 0
+                }
+                ,rotation: 0
+                ,stroke: Helpers.adjustAlpha(colors.red, 0.3)
+                ,fill: Helpers.adjustAlpha(colors.red, 0.1)
+            });
+
+            earth.add( self.meanSun );
+
+            self.meanSunOrbit = new Kinetic.Circle({
+                radius: self.minorAxis
+                ,x: 0
+                ,y: 0
+                ,offset: {
+                    x: self.minorAxis
+                    ,y: 0
+                }
+                ,rotation: 0
+                ,stroke: Helpers.adjustAlpha(colors.red, 0.3)
+                ,dash: [5,5]
+            });
+
+            earth.add( self.meanSunOrbit );
+
             self.sun = new Kinetic.Group({
                 x: 0
                 ,y: 0
@@ -201,8 +233,8 @@ define([
 
             bgLayer.add(self.orbitLine);
             bgLayer.add(sunGuides);
-            layer.add(self.sun);
             layer.add(earth);
+            layer.add(self.sun);
 
             stage.add(bgLayer);
             stage.add(layer);
@@ -210,7 +242,7 @@ define([
             self.layer = layer;
             self.bgLayer = bgLayer;
 
-            self.setEccentricity( 0.1 );
+            self.setEccentricity( 0.4 );
             self.initEvents();
             self.initAnim();
             self.after('ready', function(){
@@ -310,9 +342,15 @@ define([
 
         // in radians
         ,sunAngle: function( angle ){
-
+            var orbit, r;
             angle %= Pi2;
             this.sunAng = angle * deg;
+            this.meanSun.rotation( -angle * deg );
+            orbit = this.meanSunOrbit;
+            r = orbit.radius();
+            orbit.offsetX( Math.cos( -angle ) * r );
+            orbit.offsetY( Math.sin( -angle ) * r );
+
         }
 
         // in radians
@@ -388,6 +426,8 @@ define([
 
             self.sun.on('dragmove', function( e ){
                 self.setEccentricity( self.sun.x()/self.majorAxis );
+                self.setDay( self.day );
+                self.layer.draw();
             });
         }
 
