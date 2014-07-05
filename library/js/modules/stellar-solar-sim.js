@@ -127,6 +127,37 @@ define([
                 ,scaleY: -1
             });
 
+            self.stellarLabel = new Kinetic.Text({
+                text: '0'
+                ,x: 0
+                ,y: 0
+                ,offset: {
+                    x: 2 * dim( r ) + 20
+                    ,y: 13
+                }
+                ,fill: colors.blue
+                ,strokeWidth: 1
+                ,fontFamily: '"latin-modern-mono-light", Courier, monospace'
+                ,fontSize: 26
+                ,align: 'center'
+            });
+
+            self.solarLabelRadius = 2 * dim( r ) + 13;
+            self.solarLabel = new Kinetic.Text({
+                text: '0'
+                ,x: -self.solarLabelRadius
+                ,y: 0
+                ,offset: {
+                    x: 6
+                    ,y: 13
+                }
+                ,fill: colors.yellow
+                ,strokeWidth: 1
+                ,fontFamily: '"latin-modern-mono-light", Courier, monospace'
+                ,fontSize: 26
+                ,align: 'center'
+            });
+
             var solarLine = new Kinetic.Line({
                 points: [-dim( r ) * 1.3, 0, -dim( r )*2, 0]
                 ,stroke: colors.yellow
@@ -156,6 +187,8 @@ define([
             earth.add(this.stellarNoon);
             earth.add(wedgeStellar);
             earth.add(wedgeStellarFull);
+            earth.add(self.stellarLabel);
+            earth.add(self.solarLabel);
 
             var sun = new Kinetic.Circle({
                 x: dim(300)
@@ -224,6 +257,10 @@ define([
 
             // automatically cycle the days
             self.day = (d + self.daysPerYear) % self.daysPerYear;
+
+            self.stellarLabel.text( Math.floor(self.day) );
+            self.solarLabel.text( Math.floor(self.day - self.day/self.daysPerYear) );
+
             rot = Pi2 * self.day;
             ang = rot / self.daysPerYear;
 
@@ -239,6 +276,8 @@ define([
 
             angle %= Pi2;
             this.sunAng = angle * deg;
+            this.solarLabel.x( -Math.cos( angle ) * this.solarLabelRadius );
+            this.solarLabel.y( Math.sin( angle ) * this.solarLabelRadius );
         }
 
         // in radians
