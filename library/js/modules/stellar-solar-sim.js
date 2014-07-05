@@ -87,10 +87,24 @@ define([
                 ,scaleY: -1
             });
 
-            var wedgeDiff = new Kinetic.Wedge({
+            var wedgeStellarFull = new Kinetic.Wedge({
                 x: 0
                 ,y: 0
-                ,radius: dim( r ) * 1.55
+                ,radius: dim( r ) * 1.3
+                ,angle: 360
+                ,opacity: 0
+                ,fill: colors.blue
+                ,stroke: colors.blue
+                ,strokeWidth: 0
+                ,rotation: 180
+                ,scaleY: -1
+            });
+
+            var wedgeDiff = new Kinetic.Arc({
+                x: 0
+                ,y: 0
+                ,innerRadius: dim( r ) * 1.3
+                ,outerRadius: dim( r ) * 1.55
                 ,angle: 0
                 ,fill: colors.yellow
                 ,stroke: colors.yellow
@@ -99,8 +113,22 @@ define([
                 ,scaleY: -1
             });
 
+            var wedgeDiffFull = new Kinetic.Arc({
+                x: 0
+                ,y: 0
+                ,innerRadius: dim( r ) * 1.3
+                ,outerRadius: dim( r ) * 1.55
+                ,angle: 360
+                ,opacity: 0
+                ,fill: colors.yellow
+                ,stroke: colors.yellow
+                ,strokeWidth: 0
+                ,rotation: 180
+                ,scaleY: -1
+            });
+
             var solarLine = new Kinetic.Line({
-                points: [0, 0, -dim( r )*2, 0]
+                points: [-dim( r ) * 1.3, 0, -dim( r )*2, 0]
                 ,stroke: colors.yellow
                 ,strokeWidth: 2
             });
@@ -118,12 +146,16 @@ define([
             this.stellarNoon.add( stellarLine );
 
             this.wedgeStellar = wedgeStellar;
+            this.wedgeStellarFull = wedgeStellarFull;
             this.wedgeDiff = wedgeDiff;
+            this.wedgeDiffFull = wedgeDiffFull;
 
             earth.add(this.solarNoon);
             earth.add(wedgeDiff);
+            earth.add(wedgeDiffFull);
             earth.add(this.stellarNoon);
             earth.add(wedgeStellar);
+            earth.add(wedgeStellarFull);
 
             var sun = new Kinetic.Circle({
                 x: dim(300)
@@ -189,6 +221,7 @@ define([
                 ,earth = self.earth
                 ,r = self.earthDist
                 ;
+
             // automatically cycle the days
             self.day = (d + self.daysPerYear) % self.daysPerYear;
             rot = Pi2 * self.day;
@@ -214,14 +247,46 @@ define([
             angle %= Pi2;
             // convert
             angle *= deg;
+
+            // if the angle seems to have crossed the 360 deg mark
+            if ( this.wedgeStellar.angle() > 340 && angle < 20 ){
+                this.wedgeStellarFull.opacity( 1 );
+                var tween = new Kinetic.Tween({
+                  node: this.wedgeStellarFull,
+                  opacity: 0,
+                  duration: .3,
+                  easing: Kinetic.Easings.Linear
+                });
+
+                // play tween
+                tween.play();
+            }
+
             this.wedgeStellar.setAngle( angle );
             this.earthImg.rotation( 90-angle );
         }
 
         ,updateDiff: function(){
             var a = this.sunAng;
+            var angle = this.wedgeStellar.getAngle() - a;
+            angle = (angle + 360) % 360;
+
+            // if the angle seems to have crossed the 360 deg mark
+            if ( this.wedgeDiff.angle() > 340 && angle < 20 ){
+                this.wedgeDiffFull.opacity( 1 );
+                var tween = new Kinetic.Tween({
+                  node: this.wedgeDiffFull,
+                  opacity: 0,
+                  duration: .3,
+                  easing: Kinetic.Easings.Linear
+                });
+
+                // play tween
+                tween.play();
+            }
+
             this.wedgeDiff.rotation( 180-a );
-            this.wedgeDiff.setAngle( this.wedgeStellar.getAngle() - a );
+            this.wedgeDiff.setAngle( angle );
             this.solarNoon.rotation( -a );
         }
 
