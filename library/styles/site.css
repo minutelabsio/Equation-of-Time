@@ -649,7 +649,7 @@ html, body, #wrap-outer {
   z-index: 2;
   color: gainsboro;
   padding-top: 85px;
-  background: url('../images/time-past-noon-feather.png?1404404424') no-repeat top center;
+  background: url('../images/time-past-noon-feather.png?1404504733') no-repeat top center;
   background-size: 70px;
 }
 /* line 214, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
@@ -664,7 +664,7 @@ html, body, #wrap-outer {
   z-index: 2;
   color: gainsboro;
   padding-top: 85px;
-  background: url('../images/time-before-noon-feather.png?1404404663') no-repeat top center;
+  background: url('../images/time-before-noon-feather.png?1404504733') no-repeat top center;
   background-size: 70px;
 }
 /* line 227, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
@@ -679,7 +679,7 @@ html, body, #wrap-outer {
   color: gainsboro;
   width: 70px;
   height: 90px;
-  background: url('../images/time-noon-feather.png?1404403511') no-repeat top center;
+  background: url('../images/time-noon-feather.png?1404504733') no-repeat top center;
   background-size: 70px;
 }
 
@@ -780,15 +780,17 @@ html, body, #wrap-outer {
   float: left;
   width: 400px;
   height: 400px;
+  position: relative;
+  z-index: 2;
 }
 
-/* line 342, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 344, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #axis-ctrl {
   margin-top: -40px;
 }
 
-/* line 346, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
+/* line 348, /Users/wellcaffeinated/Documents/github/minutelabs/Equation-of-Time/library/styles/site.scss */
 #eot-plot {
-  width: 100%;
-  margin-top: 140px;
+  width: 1280px;
+  margin: 140px -100% 0;
 }
