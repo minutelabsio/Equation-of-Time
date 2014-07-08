@@ -239,6 +239,17 @@ define([
             self.emit('change:day', self.day);
         }
 
+        ,setTilt: function( ang ){
+            var self = this;
+            ang = Math.max(Math.min( ang, self.maxTilt ), -self.maxTilt);
+            self.tilt = ang;
+            self.earth.rotation( ang );
+            self.tiltText.text( ang.toFixed(1) + degSymb );
+            self.axisArc.clockwise( ang < 0 );
+            self.axisArc.angle( ang );
+            self.emit('change:tilt', self.tilt);
+        }
+
         // Initialize events
         ,initEvents: function(){
 
@@ -260,13 +271,7 @@ define([
                         ,ang = Math.atan2( x, -y ) * deg
                         ;
 
-                    ang = Math.max(Math.min( ang, self.maxTilt ), -self.maxTilt);
-                    self.tilt = ang;
-                    self.earth.rotation( ang );
-                    self.tiltText.text( ang.toFixed(1) + degSymb );
-                    self.axisArc.clockwise( ang < 0 );
-                    self.axisArc.angle( ang );
-                    self.emit('change:tilt', self.tilt);
+                    self.setTilt( ang );
                     self.layer.draw();
                 }
             });

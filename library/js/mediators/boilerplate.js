@@ -52,10 +52,11 @@ define([
             self.media = EOTMedia({
                 controls: '#media-controls'
                 ,tracks: [
-                    '../../media/stellar-v-solar'
-                    ,'../../media/test'
-                    ,'../../media/test'
-                    ,'../../media/test'
+                    '../../media/video'
+                    ,'../../media/stellar-v-solar'
+                    ,'../../media/elliptical-orbit'
+                    ,'../../media/axial-tilt'
+                    ,'../../media/combined'
                 ]
             });
 
@@ -145,17 +146,17 @@ define([
             });
 
             ///////////
-            // Slide 1
+            // Slide 2
             this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
 
             self.on('slide', function( e, idx ){
-                if ( idx !== 1 ){
+                if ( idx !== 2 ){
                     self.sims.stellarSolar.stop();
                 }
             });
 
             self.media.after('ready', function(){
-                var track = self.media.tracks[0];
+                var track = self.media.tracks[1];
                 var sim = self.sims.stellarSolar;
                 track.on('play', function(){
                     sim.stop();
@@ -174,8 +175,8 @@ define([
                         }
                     }
                 }).code({
-                    start: 17
-                    ,end: 19
+                    start: 18
+                    ,end: 20
                     ,onFrame: function( e ){
                         if ( !this.paused() ){
                             var d = e.end - e.start;
@@ -186,8 +187,8 @@ define([
                         }
                     }
                 }).code({
-                    start: 21
-                    ,end: 22
+                    start: 24
+                    ,end: 26
                     ,onFrame: function( e ){
                         if ( !this.paused() ){
                             var d = e.end - e.start;
@@ -198,7 +199,7 @@ define([
                         }
                     }
                 }).code({
-                    start: 27
+                    start: 31
                     ,onStart: function( e ){
                         sim.start();
                     }
@@ -206,11 +207,11 @@ define([
             });
 
             ///////////
-            // Slide 2
+            // Slide 3
             this.sims.eccentricOrbit = EccentricOrbitSim('#eccentric-orbit-sim');
 
             self.on('slide', function( e, idx ){
-                if ( idx !== 2 ){
+                if ( idx !== 3 ){
                     self.sims.eccentricOrbit.stop();
                 }
             });
@@ -228,7 +229,7 @@ define([
             });
 
             self.media.after('ready', function(){
-                var track = self.media.tracks[1];
+                var track = self.media.tracks[2];
                 var sim = self.sims.eccentricOrbit;
                 track.on('play', function(){
                     sim.stop();
@@ -236,28 +237,69 @@ define([
                     sim.start();
                 }).code({
                     start: 0
-                    ,end: track.duration()
+                    ,end: 16
+                    ,onStart: function(){
+                        sim.setEccentricity( 0 );
+                    }
                     ,onFrame: function( e ){
                         if ( !this.paused() ){
                             var d = e.end - e.start;
                             var t = this.currentTime() - e.start;
                             t = t > d ? d : t;
-                            sim.setDay( Helpers.lerp(0, 60, t/d) );
+                            sim.setDay( Helpers.lerp(0, 6, t/d) );
                             sim.layer.draw();
                         }
                     }
-                    ,onEnd: function( e ){
+                }).code({
+                    start: 14
+                    ,end: 15
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            sim.setEccentricity( Helpers.lerp(0, 0.4, t/d) );
+                            sim.layer.draw();
+                        }
+                    }
+                }).code({
+                    start: 19
+                    ,onStart: function( e ){
                         sim.start();
+                    }
+                }).code({
+                    start: 33
+                    ,end: 34.5
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            sim.setEccentricity( Helpers.lerp(0.4, 0, t/d) );
+                            sim.layer.draw();
+                        }
+                    }
+                }).code({
+                    start: 35.5
+                    ,end: 37
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            sim.setEccentricity( Helpers.lerp(0, 0.4, t/d) );
+                            sim.layer.draw();
+                        }
                     }
                 });
             });
 
             //////////
-            // Slide 3
+            // Slide 4
             this.sims.axialTilt = AxialTiltSim('#axial-tilt-sim');
 
             self.on('slide', function( e, idx ){
-                if ( idx !== 3 ){
+                if ( idx !== 4 ){
                     self.sims.axialTilt.stop();
                 }
             });
@@ -292,6 +334,7 @@ define([
 
             // map move
             var mapPos;
+            var mapInitialPos = 24;
             this.sims.axialTiltMap.$el.hammer()
                 .on('dragstart', function(){
                     mapPos = parseInt($(this).css('background-position-x'));
@@ -301,22 +344,40 @@ define([
                 });
 
             self.media.after('ready', function(){
-                var track = self.media.tracks[2];
+                var track = self.media.tracks[3];
                 var sim = self.sims.axialTilt;
                 track.on('play', function(){
                     sim.stop();
                 }).on('pause', function(){
                     sim.start();
                 }).code({
-                    start: 0
-                    ,end: track.duration()
+                    start: 1
+                    ,end: 3
+                    ,onStart: function( e ){
+                        sim.start();
+                    }
                     ,onFrame: function( e ){
                         if ( !this.paused() ){
                             var d = e.end - e.start;
                             var t = this.currentTime() - e.start;
                             t = t > d ? d : t;
-                            sim.setDay( Helpers.lerp(0, 6000, t/d) );
+                            sim.setTilt( Helpers.lerp(0, 23.4, t/d) );
                             sim.layer.draw();
+                        }
+                    }
+                })
+                .code({
+                    start: 32
+                    ,end: 40
+                    ,onStart: function(){
+                        sim.stop();
+                    }
+                    ,onFrame: function( e ){
+                        if ( !this.paused() ){
+                            var d = e.end - e.start;
+                            var t = this.currentTime() - e.start;
+                            t = t > d ? d : t;
+                            self.sims.axialTiltMap.$el[0].style.backgroundPosition = (Helpers.lerp(mapInitialPos, mapInitialPos + sim.$el.width() - sim.sun.x(), t/d))+ 'px 0';
                         }
                     }
                     ,onEnd: function( e ){
@@ -326,7 +387,7 @@ define([
             });
 
             /////////////
-            // Slide 4
+            // Slide 5
             var year = 365.24;
             var vernal = 79 + 17/24;
             var perihelion = 3 + 14.5/24;
@@ -334,7 +395,7 @@ define([
             this.sims.axisCtrl = AxialTiltSim('#axis-ctrl');
 
             self.on('slide', function( e, idx ){
-                if ( idx !== 4 ){
+                if ( idx !== 5 ){
                     self.sims.eccCtrl.stop();
                 }
             });
@@ -361,7 +422,7 @@ define([
             setEotFn( self.sims.axisCtrl.tilt );
 
             self.media.after('ready', function(){
-                var track = self.media.tracks[3];
+                var track = self.media.tracks[4];
                 var sim = self.sims.eccCtrl;
                 track.on('play', function(){
                     sim.stop();
