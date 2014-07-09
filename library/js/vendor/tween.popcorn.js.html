@@ -1,0 +1,63 @@
+<html>
+<head>
+<script src="../vendor/popcorn-custom.js"></script>
+<script src="tween.popcorn.js"></script>
+<script>
+Popcorn(function(){
+    var track = Popcorn.smart('#embed', ['https://www.youtube.com/watch?v=NVpv_rJeQcQ&controls=1'], { controls:true });
+    var el = document.getElementById('test');
+    track.tween({
+        start: 3
+        ,end: 5
+        ,from: {
+            top: 0
+            ,left: 30
+        }
+        ,to: {
+            top: 100
+            ,left: 400
+        }
+        ,onUpdate: function( vals ){
+            // console.log(vals.top)
+            test.style.top = vals.top + 'px';
+            test.style.left = vals.left + 'px';
+        }
+        ,easing: Popcorn.Easing.Quadratic.InOut
+    }).tween({
+        start: 5
+        ,end: 7
+        ,from: {
+            top: 100
+            ,left: 400
+        }
+        ,to: {
+            top: 500
+            ,left: 200
+        }
+        ,onUpdate: function( vals ){
+            // console.log(vals.top)
+            test.style.top = vals.top + 'px';
+            test.style.left = vals.left + 'px';
+        }
+        ,easing: Popcorn.Easing.Quadratic.InOut
+    });
+});
+</script>
+<style>
+#embed {
+    width: 560px;
+    height: 316px;
+}
+#test {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: red;
+}
+</style>
+</head>
+<body>
+<div id="embed"></div>
+<div id="test"></div>
+</body>
+</html>

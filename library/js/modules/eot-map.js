@@ -278,7 +278,7 @@ define([
             this.meanSun.x( sx * x );
             this.sun.x( sx * ra );
             this.sun.y( -sy * dec );
-
+            
             w = ra - x;
             if ( Math.abs(w) > 0.5 ){
                 w -= 1;
