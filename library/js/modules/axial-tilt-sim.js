@@ -260,6 +260,7 @@ define([
             self.axisHandle.on('mousedown touchstart', function( e ){
                 e.evt.preventDefault();
                 drag = true;
+                self.grab = true;
             });
             self.stage.on('contentMousemove contentTouchmove', function( e ){
 
@@ -277,6 +278,7 @@ define([
             });
             self.stage.on('contentMouseup contentTouchend', function( e ){
                 drag = false;
+                self.grab = false;
             });
         }
 

@@ -399,6 +399,7 @@ define([
                 // stop the anim
                 self.stop();
                 drag = true;
+                self.grab = true;
             });
             self.stage.on('contentMousemove contentTouchmove', function( e ){
 
@@ -422,6 +423,7 @@ define([
                     self.start();
                 }
                 drag = false;
+                self.grab = false;
             });
 
             self.sun.on('dragmove', function( e ){

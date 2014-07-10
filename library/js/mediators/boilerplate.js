@@ -198,7 +198,7 @@ define([
                 }).code({
                     start: 31
                     ,onFrame: function( e ){
-                        if ( !sim.anim.isRunning() ){
+                        if ( !sim.grab && !sim.anim.isRunning() ){
                             sim.start();
                         }
                     }
@@ -283,7 +283,7 @@ define([
                 }).code({
                     start: 19
                     ,onFrame: function( e ){
-                        if ( !sim.anim.isRunning() ){
+                        if ( !sim.grab && !sim.anim.isRunning() ){
                             sim.start();
                         }
                     }
@@ -638,7 +638,7 @@ define([
                 }).code({
                     start: 118
                     ,onFrame: function( e ){
-                        if ( !sim.anim.isRunning() ){
+                        if ( !sim.grab && !sim.anim.isRunning() ){
                             sim.start();
                         }
                     }
