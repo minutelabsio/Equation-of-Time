@@ -49,17 +49,18 @@ define([
             self.sims = {};
             self.initEvents();
 
-            self.media = EOTMedia({
-                controls: '#media-controls'
-                ,tracks: [
-                    '../../media/stellar-v-solar'
-                    ,'../../media/test'
-                    ,'../../media/test'
-                    ,'../../media/test'
-                ]
-            });
-
             $(function(){
+                self.media = EOTMedia({
+                    controls: '#media-controls'
+                    ,tracks: [
+                        '../../media/video'
+                        ,'../../media/stellar-v-solar'
+                        ,'../../media/elliptical-orbit'
+                        ,'../../media/axial-tilt'
+                        ,'../../media/combined'
+                    ]
+                });
+
                 self.onDomReady();
                 self.resolve('domready');
             });
@@ -145,72 +146,71 @@ define([
             });
 
             ///////////
-            // Slide 1
+            // Slide 2
             this.sims.stellarSolar = StellarSolarSim('#stellar-solar-sim');
 
             self.on('slide', function( e, idx ){
-                if ( idx !== 1 ){
+                if ( idx !== 2 ){
                     self.sims.stellarSolar.stop();
                 }
             });
 
             self.media.after('ready', function(){
-                var track = self.media.tracks[0];
+                var track = self.media.tracks[1];
                 var sim = self.sims.stellarSolar;
                 track.on('play', function(){
                     sim.stop();
                 }).on('pause', function(){
                     sim.start();
-                }).code({
+                }).tween({
                     start: 0
                     ,end: 15
-                    ,onFrame: function( e ){
-                        if ( !this.paused() ){
-                            var d = e.end - e.start;
-                            var t = this.currentTime() - e.start;
-                            t = t > d ? d : t;
-                            sim.setDay( Helpers.lerp(0, 6, t/d) );
-                            sim.layer.draw();
+                    ,from: { day: 0 }
+                    ,to: { day: 6 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 18
+                    ,end: 20
+                    ,from: { day: 0 }
+                    ,to: { day: 1 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 24
+                    ,end: 26
+                    ,from: { day: 1 }
+                    ,to: { day: 1 + 1/5 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
                         }
                     }
                 }).code({
-                    start: 17
-                    ,end: 19
+                    start: 31
                     ,onFrame: function( e ){
-                        if ( !this.paused() ){
-                            var d = e.end - e.start;
-                            var t = this.currentTime() - e.start;
-                            t = t > d ? d : t;
-                            sim.setDay( Helpers.lerp(0, 1, t/d) );
-                            sim.layer.draw();
+                        if ( !sim.anim.isRunning() ){
+                            sim.start();
                         }
-                    }
-                }).code({
-                    start: 21
-                    ,end: 22
-                    ,onFrame: function( e ){
-                        if ( !this.paused() ){
-                            var d = e.end - e.start;
-                            var t = this.currentTime() - e.start;
-                            t = t > d ? d : t;
-                            sim.setDay( Helpers.lerp(1, 1+1/5, t/d) );
-                            sim.layer.draw();
-                        }
-                    }
-                }).code({
-                    start: 27
-                    ,onStart: function( e ){
-                        sim.start();
                     }
                 });
             });
 
             ///////////
-            // Slide 2
+            // Slide 3
             this.sims.eccentricOrbit = EccentricOrbitSim('#eccentric-orbit-sim');
 
             self.on('slide', function( e, idx ){
-                if ( idx !== 2 ){
+                if ( idx !== 3 ){
                     self.sims.eccentricOrbit.stop();
                 }
             });
@@ -228,36 +228,106 @@ define([
             });
 
             self.media.after('ready', function(){
-                var track = self.media.tracks[1];
+                var track = self.media.tracks[2];
                 var sim = self.sims.eccentricOrbit;
                 track.on('play', function(){
                     sim.stop();
                 }).on('pause', function(){
                     sim.start();
-                }).code({
+                }).tween({
                     start: 0
-                    ,end: track.duration()
-                    ,onFrame: function( e ){
-                        if ( !this.paused() ){
-                            var d = e.end - e.start;
-                            var t = this.currentTime() - e.start;
-                            t = t > d ? d : t;
-                            sim.setDay( Helpers.lerp(0, 60, t/d) );
-                            sim.layer.draw();
+                    ,end: 16
+                    ,from: {
+                        day: 0
+                    }
+                    ,to: {
+                        day: 6
+                    }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
                         }
                     }
-                    ,onEnd: function( e ){
-                        sim.start();
+                }).tween({
+                    start: 0
+                    ,end: 14
+                    ,from: {
+                        e: 0
+                    }
+                    ,to: {
+                        e: 0
+                    }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setEccentricity( vals.e );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 14
+                    ,end: 15
+                    ,from: {
+                        e: 0
+                    }
+                    ,to: {
+                        e: 0.4
+                    }
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setEccentricity( vals.e );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).code({
+                    start: 19
+                    ,onFrame: function( e ){
+                        if ( !sim.anim.isRunning() ){
+                            sim.start();
+                        }
+                    }
+                }).tween({
+                    start: 33
+                    ,end: 34.5
+                    ,from: {
+                        e: 0.4
+                    }
+                    ,to: {
+                        e: 0
+                    }
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setEccentricity( vals.e );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 35.5
+                    ,end: 37
+                    ,from: {
+                        e: 0
+                    }
+                    ,to: {
+                        e: 0.4
+                    }
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setEccentricity( vals.e );
+                            sim.layer.batchDraw();
+                        }
                     }
                 });
             });
 
             //////////
-            // Slide 3
+            // Slide 4
             this.sims.axialTilt = AxialTiltSim('#axial-tilt-sim');
 
             self.on('slide', function( e, idx ){
-                if ( idx !== 3 ){
+                if ( idx !== 4 ){
                     self.sims.axialTilt.stop();
                 }
             });
@@ -292,41 +362,291 @@ define([
 
             // map move
             var mapPos;
-            this.sims.axialTiltMap.$el.hammer()
-                .on('dragstart', function(){
-                    mapPos = parseInt($(this).css('background-position-x'));
-                })
-                .on('drag', function( e ){
-                    this.style.backgroundPosition = (mapPos + e.gesture.deltaX)+ 'px 0';
-                });
+            var mapInitialPos = 24;
+            var mapWidth = self.sims.axialTiltMap.$el.width();
+            // this.sims.axialTiltMap.$el.hammer()
+            //     .on('dragstart', function(){
+            //         mapPos = parseInt($(this).css('background-position-x'));
+            //     })
+            //     .on('drag', function( e ){
+            //         this.style.backgroundPosition = (mapPos + e.gesture.deltaX)+ 'px 0';
+            //     });
 
             self.media.after('ready', function(){
-                var track = self.media.tracks[2];
+                var track = self.media.tracks[3];
                 var sim = self.sims.axialTilt;
                 track.on('play', function(){
                     sim.stop();
                 }).on('pause', function(){
                     sim.start();
-                }).code({
+                }).tween({
                     start: 0
-                    ,end: track.duration()
-                    ,onFrame: function( e ){
-                        if ( !this.paused() ){
-                            var d = e.end - e.start;
-                            var t = this.currentTime() - e.start;
-                            t = t > d ? d : t;
-                            sim.setDay( Helpers.lerp(0, 6000, t/d) );
-                            sim.layer.draw();
+                    ,end: 3
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,from: {
+                        tilt: 0
+                    }
+                    ,to: {
+                        tilt: 23.4
+                    }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setTilt( vals.tilt );
+                            sim.layer.batchDraw();
                         }
                     }
-                    ,onEnd: function( e ){
-                        sim.start();
+                }).tween({
+                    start: 0
+                    ,end: 32
+                    ,from: {
+                        day: 0
+                        ,x: parseInt(self.sims.axialTiltMap.$el.css('background-position-x'))
+                    }
+                    ,to: {
+                        day: sim.daysPerYear * 2.2
+                        ,x: '+0'
+                    }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.axialTiltMap.$el[0].style.backgroundPosition = vals.x + 'px 0';
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 32
+                    ,end: 40
+                    ,from: {
+                        day: sim.daysPerYear * 2.2
+                        ,x: parseInt(self.sims.axialTiltMap.$el.css('background-position-x'))
+                    }
+                    ,to: {
+                        day: sim.daysPerYear * 2.2
+                        ,x: '+' + self.sims.axialTiltMap.$el.width()
+                    }
+                    ,onStart: function( data ){
+                        data.to.x = data.from.x + 0.5*self.sims.axialTiltMap.$el.width() + self.sims.axialTiltMap.sun.x();
+                    }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.axialTiltMap.$el[0].style.backgroundPosition = vals.x + 'px 0';
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                })
+                .tween({
+                    start: 44
+                    ,end: 44.5
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,from: {
+                        x: mapInitialPos
+                    }
+                    ,to: {
+                        x: mapInitialPos
+                    }
+                    ,onStart: function( data ){
+                        var width = self.sims.axialTiltMap.$el.width();
+                        data.from.x = parseInt(self.sims.axialTiltMap.$el.css('background-position-x'));
+                        data.to.x = Math.ceil(data.from.x / width) * width + mapInitialPos;
+
+                        // mapInitialPos = parseInt(self.sims.axialTiltMap.$el.css('background-position-x'));
+                        // mapWidth = self.sims.axialTiltMap.$el.width();
+                    }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.axialTiltMap.$el[0].style.backgroundPosition = vals.x + 'px 0';
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 44
+                    ,end: 57
+                    ,from: { day: sim.daysPerYear * 2.2 }
+                    ,to: { day: sim.daysPerYear * 3 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 48
+                    ,end: 49.5
+                    ,from: {
+                        tilt: 23.4
+                    }
+                    ,to: {
+                        tilt: 0
+                    }
+                    ,easing: Popcorn.Easing.Quadratic.In
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setTilt( vals.tilt );
+                        }
+                    }
+                }).tween({
+                    start: 49.5
+                    ,end: 51
+                    ,from: {
+                        tilt: 0
+                    }
+                    ,to: {
+                        tilt: 23.4
+                    }
+                    ,easing: Popcorn.Easing.Quadratic.Out
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setTilt( vals.tilt );
+                        }
+                    }
+                }).tween({
+                    start: 58
+                    ,end: 59
+                    ,from: { day: sim.daysPerYear * 3 }
+                    ,to: { day: sim.daysPerYear * 3.25 }
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 60
+                    ,end: 61
+                    ,from: { day: sim.daysPerYear * 3.25 }
+                    ,to: { day: sim.daysPerYear * 3.75 }
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 62
+                    ,end: 82
+                    ,from: { day: sim.daysPerYear * 3.75 }
+                    ,to: { day: sim.daysPerYear * 5.85 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 86
+                    ,end: 93
+                    ,from: { day: sim.daysPerYear * 5.85 }
+                    ,to: { day: sim.daysPerYear * 6.15 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 98
+                    ,end: 102
+                    ,from: { day: sim.daysPerYear * 6.15 }
+                    ,to: { day: sim.daysPerYear * 6.3 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 103
+                    ,end: 105
+                    ,from: { day: sim.daysPerYear * 6.3 }
+                    ,to: { day: sim.daysPerYear * 6.6 }
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 110
+                    ,end: 113.5
+                    ,from: {
+                        x: mapInitialPos
+                        ,day: sim.daysPerYear * 6.6
+                    }
+                    ,to: {
+                        x: mapInitialPos
+                        ,day: sim.daysPerYear * 6.6
+                    }
+                    ,onStart: function( data ){
+                        data.to.x = data.from.x + 0.5*self.sims.axialTiltMap.$el.width() + self.sims.axialTiltMap.sun.x();
+                    }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.axialTiltMap.$el[0].style.backgroundPosition = vals.x + 'px 0';
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 115
+                    ,end: 116
+                    ,from: {
+                        x: mapInitialPos
+                        ,day: sim.daysPerYear * 6.6
+                    }
+                    ,to: {
+                        x: '+5'
+                        ,day: sim.daysPerYear * 6.6
+                    }
+                    ,onStart: function( data ){
+                        data.from.x = parseInt(self.sims.axialTiltMap.$el[0].style.backgroundPosition);
+                    }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.axialTiltMap.$el[0].style.backgroundPosition = vals.x + 'px 0';
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).tween({
+                    start: 118
+                    ,end: 119
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,from: {
+                        x: mapInitialPos
+                    }
+                    ,to: {
+                        x: mapInitialPos
+                    }
+                    ,onStart: function( data ){
+                        var width = self.sims.axialTiltMap.$el.width();
+                        data.from.x = parseInt(self.sims.axialTiltMap.$el.css('background-position-x'));
+                        data.to.x = Math.ceil(data.from.x / width) * width + mapInitialPos;
+
+                        // mapInitialPos = parseInt(self.sims.axialTiltMap.$el.css('background-position-x'));
+                        // mapWidth = self.sims.axialTiltMap.$el.width();
+                    }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.axialTiltMap.$el[0].style.backgroundPosition = vals.x + 'px 0';
+                            sim.layer.batchDraw();
+                        }
+                    }
+                }).code({
+                    start: 118
+                    ,onFrame: function( e ){
+                        if ( !sim.anim.isRunning() ){
+                            sim.start();
+                        }
                     }
                 });
             });
 
             /////////////
-            // Slide 4
+            // Slide 5
             var year = 365.24;
             var vernal = 79 + 17/24;
             var perihelion = 3 + 14.5/24;
@@ -334,7 +654,7 @@ define([
             this.sims.axisCtrl = AxialTiltSim('#axis-ctrl');
 
             self.on('slide', function( e, idx ){
-                if ( idx !== 4 ){
+                if ( idx !== 5 ){
                     self.sims.eccCtrl.stop();
                 }
             });
@@ -361,26 +681,90 @@ define([
             setEotFn( self.sims.axisCtrl.tilt );
 
             self.media.after('ready', function(){
-                var track = self.media.tracks[3];
+                var track = self.media.tracks[4];
                 var sim = self.sims.eccCtrl;
                 track.on('play', function(){
                     sim.stop();
                 }).on('pause', function(){
                     sim.start();
-                }).code({
+                }).tween({
                     start: 0
-                    ,end: track.duration()
-                    ,onFrame: function( e ){
-                        if ( !this.paused() ){
-                            var d = e.end - e.start;
-                            var t = this.currentTime() - e.start;
-                            t = t > d ? d : t;
-                            sim.setDay( Helpers.lerp(0, 60, t/d) );
-                            sim.layer.draw();
+                    ,end: 60
+                    ,from: { day: 0 }
+                    ,to: { day: sim.daysPerYear * 6 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.setDay( vals.day );
+                            sim.layer.batchDraw();
                         }
                     }
-                    ,onEnd: function( e ){
-                        sim.start();
+                }).tween({
+                    start: 0
+                    ,end: 11
+                    ,from: { e: 0, tilt: 0 }
+                    ,to: { e: 0, tilt: 0 }
+                    ,easing: Popcorn.Easing.Quadratic.In
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.eccCtrl.setEccentricity( vals.e );
+                            self.sims.axisCtrl.setTilt( vals.tilt );
+                        }
+                    }
+                }).tween({
+                    start: 11
+                    ,end: 12
+                    ,from: { e: 0 }
+                    ,to: { e: 0.4 }
+                    ,easing: Popcorn.Easing.Quadratic.In
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.eccCtrl.setEccentricity( vals.e );
+                        }
+                    }
+                }).tween({
+                    start: 12
+                    ,end: 13
+                    ,from: { tilt: 0 }
+                    ,to: { tilt: 40 }
+                    ,easing: Popcorn.Easing.Quadratic.In
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.axisCtrl.setTilt( vals.tilt );
+                        }
+                    }
+                }).tween({
+                    start: 14
+                    ,end: 15
+                    ,from: { e: 0.4, tilt: 40 }
+                    ,to: { e: 0, tilt: 0 }
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.eccCtrl.setEccentricity( vals.e );
+                            self.sims.axisCtrl.setTilt( vals.tilt );
+                        }
+                    }
+                }).tween({
+                    start: 26
+                    ,end: 27
+                    ,from: { e: 0 }
+                    ,to: { e: 0.0167 }
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.eccCtrl.setEccentricity( vals.e );
+                        }
+                    }
+                }).tween({
+                    start: 30
+                    ,end: 31
+                    ,from: { tilt: 0 }
+                    ,to: { tilt: 23.4 }
+                    ,easing: Popcorn.Easing.Quadratic.InOut
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            self.sims.axisCtrl.setTilt( vals.tilt );
+                        }
                     }
                 });
             });

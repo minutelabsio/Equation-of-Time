@@ -5,6 +5,7 @@ define([
     'hammer.jquery',
     'require',
     'popcorn',
+    'vendor/tween.popcorn',
     'moddef',
     'when'
 ], function(
@@ -14,6 +15,7 @@ define([
     _hmr,
     req,
     Popcorn,
+    _twpop,
     M,
     when
 ) {
@@ -47,9 +49,11 @@ define([
             });
 
             when.all( self.promises ).then(function(){
+
                 self.initControls( opts.controls );
                 self.setTrack( 0 );
                 self.resolve('ready');
+
             }).otherwise(function(){
                 console.log(arguments);
             });
@@ -189,6 +193,7 @@ define([
             self.on('seek', function( e, t ){
                 var track = self.tracks[ self.currentTrack ];
                 track.currentTime( t * track.duration() );
+                track.emit('seek');
             });
 
             self.on('volume', function( e, v ){

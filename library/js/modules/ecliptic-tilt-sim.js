@@ -17,7 +17,7 @@ define([
 
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
-    var earthAbove = req.toUrl('../../images/earth-north-2.png');
+    var earthAbove = req.toUrl('../../images/earth-north-2-rot.png');
 
     // Page-level Module
     var Module = M({
