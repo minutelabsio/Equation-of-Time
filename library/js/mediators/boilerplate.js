@@ -164,7 +164,7 @@ define([
                     sim.start();
                 }).tween({
                     start: 0
-                    ,end: 15
+                    ,end: 14
                     ,from: { day: 0 }
                     ,to: { day: 6 }
                     ,onUpdate: function( vals ){
@@ -174,8 +174,8 @@ define([
                         }
                     }
                 }).tween({
-                    start: 18
-                    ,end: 20
+                    start: 16
+                    ,end: 18
                     ,from: { day: 0 }
                     ,to: { day: 1 }
                     ,onUpdate: function( vals ){
@@ -185,8 +185,8 @@ define([
                         }
                     }
                 }).tween({
-                    start: 24
-                    ,end: 26
+                    start: 22
+                    ,end: 24
                     ,from: { day: 1 }
                     ,to: { day: 1 + 1/5 }
                     ,onUpdate: function( vals ){
@@ -196,10 +196,41 @@ define([
                         }
                     }
                 }).code({
-                    start: 31
+                    start: 30
                     ,onFrame: function( e ){
                         if ( !sim.grab && !sim.anim.isRunning() ){
                             sim.start();
+                        }
+                    }
+                }).tween({
+                    start: 30
+                    ,end: 31
+                    ,from: { b: 1 }
+                    ,to: { b: 0 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.wedgeStellar.opacity( vals.b );
+                        }
+                    }
+                }).tween({
+                    start: 38
+                    ,end: 39
+                    ,from: { b: 0, y: 1 }
+                    ,to: { b: 1, y: 0 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.wedgeStellar.opacity( vals.b );
+                            sim.wedgeDiff.opacity( vals.y );
+                        }
+                    }
+                }).tween({
+                    start: 53
+                    ,end: 54
+                    ,from: { y: 0 }
+                    ,to: { y: 1 }
+                    ,onUpdate: function( vals ){
+                        if ( !track.paused() ){
+                            sim.wedgeDiff.opacity( vals.y );
                         }
                     }
                 });
@@ -236,37 +267,25 @@ define([
                     sim.start();
                 }).tween({
                     start: 0
-                    ,end: 16
+                    ,end: 20
                     ,from: {
                         day: 0
+                        ,e: 0
                     }
                     ,to: {
                         day: 6
+                        ,e: 0
                     }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
                             sim.setDay( vals.day );
-                            sim.layer.batchDraw();
-                        }
-                    }
-                }).tween({
-                    start: 0
-                    ,end: 14
-                    ,from: {
-                        e: 0
-                    }
-                    ,to: {
-                        e: 0
-                    }
-                    ,onUpdate: function( vals ){
-                        if ( !track.paused() ){
                             sim.setEccentricity( vals.e );
                             sim.layer.batchDraw();
                         }
                     }
                 }).tween({
-                    start: 14
-                    ,end: 15
+                    start: 19
+                    ,end: 20
                     ,from: {
                         e: 0
                     }
@@ -281,15 +300,15 @@ define([
                         }
                     }
                 }).code({
-                    start: 19
+                    start: 22
                     ,onFrame: function( e ){
                         if ( !sim.grab && !sim.anim.isRunning() ){
                             sim.start();
                         }
                     }
                 }).tween({
-                    start: 33
-                    ,end: 34.5
+                    start: 38
+                    ,end: 39.5
                     ,from: {
                         e: 0.4
                     }
@@ -304,8 +323,8 @@ define([
                         }
                     }
                 }).tween({
-                    start: 35.5
-                    ,end: 37
+                    start: 39.5
+                    ,end: 41
                     ,from: {
                         e: 0
                     }
