@@ -289,7 +289,7 @@ define([
 
             // if the angle seems to have crossed the 360 deg mark
             if ( this.wedgeStellar.angle() > 340 && angle < 20 ){
-                this.wedgeStellarFull.opacity( 1 );
+                this.wedgeStellarFull.opacity( this.wedgeStellar.opacity() );
                 var tween = new Kinetic.Tween({
                   node: this.wedgeStellarFull,
                   opacity: 0,
@@ -312,7 +312,7 @@ define([
 
             // if the angle seems to have crossed the 360 deg mark
             if ( this.wedgeDiff.angle() > 340 && angle < 20 ){
-                this.wedgeDiffFull.opacity( 1 );
+                this.wedgeDiffFull.opacity( this.wedgeDiff.opacity() );
                 var tween = new Kinetic.Tween({
                   node: this.wedgeDiffFull,
                   opacity: 0,
