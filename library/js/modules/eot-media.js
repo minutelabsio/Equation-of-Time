@@ -124,6 +124,13 @@ define([
                 self.emit(self.playing ? 'pause' : 'play');
             });
 
+            $(window).on('keydown', function( e ){
+                // spacebar
+                if ( e.keyCode === 32 ){
+                    self.emit(self.playing ? 'pause' : 'play');
+                }
+            });
+
             seek.noUiSlider({
                 start: 0,
                 // step: 1,

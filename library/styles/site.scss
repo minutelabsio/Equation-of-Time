@@ -172,6 +172,27 @@ html, body, #wrap-outer {
     }
 }
 
+.slide-1-content {
+    position: relative;
+}
+
+#label-solar-time,
+#label-sidereal-time {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 130px;
+    font-size: 30px;
+    text-align: center;
+    color: $blue;
+}
+#label-solar-time {
+    top: auto;
+    bottom: 130px;
+    color: $yellow;
+}
+
 #stellar-solar-sim {
     margin: auto;
     width: 600px;
@@ -319,6 +340,11 @@ html, body, #wrap-outer {
         &:first-child {
             border-left: 1px solid $deep-grey-light;
         }
+    }
+
+    li.highlight {
+        color: #000;
+        background: $yellow;
     }
 
     // &:before {
