@@ -207,6 +207,9 @@ define([
                     ,end: 31
                     ,from: { b: 1 }
                     ,to: { b: 0 }
+                    ,onStart: function(){
+                        $('#label-solar-time').fadeIn();
+                    }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
                             sim.wedgeStellar.opacity( vals.b );
@@ -217,6 +220,11 @@ define([
                     ,end: 39
                     ,from: { b: 0, y: 1 }
                     ,to: { b: 1, y: 0 }
+                    ,onStart: function(){
+                        $('#label-solar-time').fadeOut(function(){
+                            $('#label-sidereal-time').fadeIn();
+                        });
+                    }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
                             sim.wedgeStellar.opacity( vals.b );
@@ -228,6 +236,10 @@ define([
                     ,end: 54
                     ,from: { y: 0 }
                     ,to: { y: 1 }
+                    ,onStart: function(){
+                        $('#label-sidereal-time').fadeOut();
+                        $('#label-solar-time').fadeOut();
+                    }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
                             sim.wedgeDiff.opacity( vals.y );
@@ -394,6 +406,7 @@ define([
             self.media.after('ready', function(){
                 var track = self.media.tracks[3];
                 var sim = self.sims.axialTilt;
+                var tiltAmt = 35;
                 track.on('play', function(){
                     sim.stop();
                 }).on('pause', function(){
@@ -406,7 +419,7 @@ define([
                         tilt: 0
                     }
                     ,to: {
-                        tilt: 23.4
+                        tilt: tiltAmt
                     }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
@@ -493,7 +506,7 @@ define([
                     start: 48
                     ,end: 49.5
                     ,from: {
-                        tilt: 23.4
+                        tilt: tiltAmt
                     }
                     ,to: {
                         tilt: 0
@@ -511,7 +524,7 @@ define([
                         tilt: 0
                     }
                     ,to: {
-                        tilt: 23.4
+                        tilt: tiltAmt
                     }
                     ,easing: Popcorn.Easing.Quadratic.Out
                     ,onUpdate: function( vals ){
@@ -600,7 +613,7 @@ define([
                         ,day: sim.daysPerYear * 6.6
                     }
                     ,onStart: function( data ){
-                        data.to.x = data.from.x + 0.5*self.sims.axialTiltMap.$el.width() + self.sims.axialTiltMap.sun.x();
+                        data.to.x = data.from.x + 0.5*self.sims.axialTiltMap.$el.width() + self.sims.axialTiltMap.sun.x() - 3;
                     }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
@@ -617,7 +630,7 @@ define([
                         ,day: sim.daysPerYear * 6.6
                     }
                     ,to: {
-                        x: '+5'
+                        x: '+12'
                         ,day: sim.daysPerYear * 6.6
                     }
                     ,onStart: function( data ){
@@ -661,6 +674,80 @@ define([
                             sim.start();
                         }
                     }
+                });
+                // highlights...
+                var marchAndSeptember = $('#axial-tilt-map-dates').find('.mar, .sept');
+                var juneAndDecember = $('#axial-tilt-map-dates').find('.jun, .dec');
+                track.code({
+                    start: 60+25
+                    ,end: 60+37
+                    ,onStart: function(){
+                        marchAndSeptember.addClass('highlight');
+                    }
+                    ,onEnd: function(){
+                        marchAndSeptember.removeClass('highlight');
+                        juneAndDecember.addClass('highlight');
+                    }
+                }).code({
+                    start: 60+37
+                    ,end: 60+43
+                    ,onEnd: function(){
+                        marchAndSeptember.removeClass('highlight');
+                        juneAndDecember.removeClass('highlight');
+                    }
+                });
+
+                var hlStep = 0;
+                var allSims = $('#axial-tilt-sim, #ecliptic-tilt-sim, .axial-tilt-col, #axial-tilt-plot');
+                var fadeAmt = 0.2;
+                track.code({
+                    start: 18
+                    ,end: 30
+                    ,onFrame: function(){
+                        if ( hlStep && hlStep !== 2 ){
+                            console.log('hlstep 2')
+                            allSims.stop().fadeTo( 500, fadeAmt );
+                            allSims.eq(0).andSelf(allSims.eq(1)).stop().fadeTo( 500, 1 );
+                            hlStep = 2;
+                        }
+                    }
+                }).code({
+                    start: 30
+                    ,end: 60+57
+                    ,onFrame: function(){
+                        if ( hlStep && hlStep !== 3 ){
+                            allSims.stop().fadeTo( 500, fadeAmt );
+                            allSims.eq(2).stop().fadeTo( 500, 1 );
+                            hlStep = 3;
+                        }
+                    }
+                }).code({
+                    start: 60+57
+                    ,end: 2*60+2
+                    ,onFrame: function(){
+                        if ( hlStep && hlStep !== 4 ){
+                            allSims.stop().fadeTo( 500, fadeAmt );
+                            allSims.eq(3).stop().fadeTo( 500, 1 );
+                            hlStep = 4;
+                        }
+                    }
+                }).code({
+                    start: 2*60+2
+                    ,end: track.duration()
+                    ,onFrame: function(){
+                        if ( hlStep && hlStep !== 5 ){
+                            allSims.stop().fadeTo( 500, fadeAmt );
+                            allSims.eq(0).stop().fadeTo( 500, 1 );
+                            hlStep = 5;
+                        }
+                    }
+                });
+
+                track.on('pause', function(){
+                    hlStep = 0;
+                    allSims.stop().fadeTo( 500, 1 );
+                }).on('play', function(){
+                    hlStep = 1;
                 });
             });
 
