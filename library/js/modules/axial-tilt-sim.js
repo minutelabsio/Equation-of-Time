@@ -42,6 +42,7 @@ define([
             // vars
             self.animSpeed = 80;
             self.daysPerYear = 365;
+            self.offset = 79/365; // because it starts in march
             self.day = 0;
             self.earthDist = dim(240);
             self.maxTilt = 90;
@@ -221,7 +222,7 @@ define([
 
             // automatically cycle the days
             self.day = (d + self.daysPerYear) % self.daysPerYear;
-            ang = -Pi2 * self.day / self.daysPerYear + Pi2*0.25;
+            ang = -Pi2 * ((self.day  / self.daysPerYear) - self.offset) + Pi2*0.25;
 
             sun.x( r * Math.cos(ang) );
             s = 1 + 0.3 * Math.sin(ang);

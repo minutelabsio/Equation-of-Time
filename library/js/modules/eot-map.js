@@ -112,6 +112,7 @@ define([
 
             // vars
             self.daysPerYear = 365;
+            self.offset = 79/365;
             self.posColor = helpers.adjustAlpha(colors.yellow, 0.8);
             self.negColor = helpers.adjustAlpha(colors.red, 0.8);
 
@@ -252,7 +253,7 @@ define([
 
         ,setDay: function( d ){
 
-            var x = d / this.daysPerYear
+            var x = d / this.daysPerYear - this.offset
                 ,sx = this.scaleX
                 ,sy = this.scaleY
                 ,tilt = this.tilt
@@ -278,7 +279,7 @@ define([
             this.meanSun.x( sx * x );
             this.sun.x( sx * ra );
             this.sun.y( -sy * dec );
-            
+
             w = ra - x;
             if ( Math.abs(w) > 0.5 ){
                 w -= 1;

@@ -15,7 +15,7 @@ define([
 
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
-    var earthAbove = req.toUrl('../../images/earth-north-2-pm.png');
+    var earthAbove = req.toUrl('../../images/earth-north-3-pm.png');
 
     // Page-level Module
     var Module = M({
@@ -59,16 +59,27 @@ define([
                     x: 0
                     ,y: 0
                     ,image: imageObj
-                    ,width: dim( 2*r ) + 8
-                    ,height: dim( 2*r ) + 8
+                    ,width: dim( 2*r )
+                    ,height: dim( 2*r )
                     ,rotation: 90
                     ,offset: {
-                        x: dim( r ) + 5
-                        ,y: dim( r ) + 4
+                        x: dim( r )
+                        ,y: dim( r )
                     }
                 });
                 self.earthImg = earthImg;
                 earth.add(earthImg);
+
+                self.shadow = new Kinetic.Wedge({
+                    x: 0
+                    ,y: 0
+                    ,radius: dim( r ) - 2
+                    ,angle: 180
+                    ,fill: 'rgba(0, 0, 0, 0.3)'
+                    ,rotation: 270
+                });
+
+                earth.add( self.shadow );
 
                 self.resolve('ready');
             };
@@ -278,6 +289,7 @@ define([
             this.sunAng = angle * deg;
             this.solarLabel.x( -Math.cos( angle ) * this.solarLabelRadius );
             this.solarLabel.y( Math.sin( angle ) * this.solarLabelRadius );
+            this.shadow.rotation( -angle * deg - 90 );
         }
 
         // in radians

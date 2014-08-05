@@ -17,7 +17,7 @@ define([
 
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
-    var earthAbove = req.toUrl('../../images/earth-north-2-rot.png');
+    var earthAbove = req.toUrl('../../images/earth-north-3.png');
 
     // Page-level Module
     var Module = M({
@@ -42,6 +42,7 @@ define([
             // vars
             self.animSpeed = 80;
             self.daysPerYear = 365;
+            self.offset = 79/365;
             self.day = 0;
             self.tilt = 0;
             self.earthDist = dim(260);
@@ -68,11 +69,11 @@ define([
                     x: 0
                     ,y: 0
                     ,image: imageObj
-                    ,width: dim( 2*r ) + 8
-                    ,height: dim( 2*r ) + 8
+                    ,width: dim( 2*r )
+                    ,height: dim( 2*r )
                     ,offset: {
-                        x: dim( r ) + 5
-                        ,y: dim( r ) + 4
+                        x: dim( r )
+                        ,y: dim( r )
                     }
                 });
                 self.earthImg = earthImg;
@@ -82,17 +83,17 @@ define([
                     x: dim( 300 )
                     ,y: dim( 300 )
                     ,image: imageObj
-                    ,width: dim( r ) + 4
-                    ,height: dim( 2*r ) + 8
+                    ,width: dim( r )
+                    ,height: dim( 2*r )
                     ,offset: {
-                        x: dim( r ) + 5
-                        ,y: dim( r ) + 4
+                        x: dim( r )
+                        ,y: dim( r )
                     }
                     ,crop: {
                         x: 0
                         ,y: 0
-                        ,width: 150
-                        ,height: 300
+                        ,width: 292/2
+                        ,height: 292
                     }
                 });
 
@@ -236,7 +237,7 @@ define([
 
             // automatically cycle the days
             self.day = (d + self.daysPerYear) % self.daysPerYear;
-            ang = -Pi2 * self.day / self.daysPerYear + Pi2*0.25;
+            ang = -Pi2 * ((self.day / self.daysPerYear) - self.offset) + Pi2*0.25;
             ang = ang % Pi2;
 
             x = r * Math.cos(ang) * Math.cos( self.tilt / deg );
@@ -274,10 +275,10 @@ define([
             if ( this.halfEarth && degrees*this.tilt <= 0 ){
                 if ( degrees >= 0 ){
                     this.halfEarth.cropX( 0 );
-                    this.halfEarth.offsetX( this.halfEarth.width() + 1 );
+                    this.halfEarth.offsetX( this.halfEarth.width() );
                 } else {
-                    this.halfEarth.cropX( 150 );
-                    this.halfEarth.offsetX( 1 );
+                    this.halfEarth.cropX( 292/2 );
+                    this.halfEarth.offsetX( 0 );
                 }
             }
 

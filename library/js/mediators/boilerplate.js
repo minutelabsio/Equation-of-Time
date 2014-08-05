@@ -355,6 +355,8 @@ define([
 
             //////////
             // Slide 4
+            var vernalFrac = 79/365;
+
             this.sims.axialTilt = AxialTiltSim('#axial-tilt-sim');
 
             self.on('slide', function( e, idx ){
@@ -376,7 +378,7 @@ define([
             this.sims.axialTiltPlot.scaleY *= 10;
             this.sims.axialTilt.on('change:tilt', function( e, tilt ){
                 self.sims.axialTiltPlot.plot( function( x ){
-                    return calcEOTFromTilt( x * Pi2, tilt );
+                    return calcEOTFromTilt( (x - vernalFrac) * Pi2, tilt );
                 }, 0.01);
             });
             this.sims.axialTilt.on('change:day', function( e, day ){
@@ -435,7 +437,7 @@ define([
                         ,x: parseInt(self.sims.axialTiltMap.$el.css('background-position-x'))
                     }
                     ,to: {
-                        day: sim.daysPerYear * 2.2
+                        day: sim.daysPerYear * (2.2 + vernalFrac)
                         ,x: '+0'
                     }
                     ,onUpdate: function( vals ){
@@ -449,11 +451,11 @@ define([
                     start: 32
                     ,end: 40
                     ,from: {
-                        day: sim.daysPerYear * 2.2
+                        day: sim.daysPerYear * (2.2 + vernalFrac)
                         ,x: parseInt(self.sims.axialTiltMap.$el.css('background-position-x'))
                     }
                     ,to: {
-                        day: sim.daysPerYear * 2.2
+                        day: sim.daysPerYear * (2.2 + vernalFrac)
                         ,x: '+' + self.sims.axialTiltMap.$el.width()
                     }
                     ,onStart: function( data ){
@@ -494,7 +496,7 @@ define([
                 }).tween({
                     start: 44
                     ,end: 57
-                    ,from: { day: sim.daysPerYear * 2.2 }
+                    ,from: { day: sim.daysPerYear * (2.2 + vernalFrac) }
                     ,to: { day: sim.daysPerYear * 3 }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
@@ -536,7 +538,7 @@ define([
                     start: 58
                     ,end: 59
                     ,from: { day: sim.daysPerYear * 3 }
-                    ,to: { day: sim.daysPerYear * 3.25 }
+                    ,to: { day: sim.daysPerYear * (3.25 + vernalFrac) }
                     ,easing: Popcorn.Easing.Quadratic.InOut
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
@@ -547,8 +549,8 @@ define([
                 }).tween({
                     start: 60
                     ,end: 61
-                    ,from: { day: sim.daysPerYear * 3.25 }
-                    ,to: { day: sim.daysPerYear * 3.75 }
+                    ,from: { day: sim.daysPerYear * (3.25 + vernalFrac) }
+                    ,to: { day: sim.daysPerYear * (3.75 + vernalFrac) }
                     ,easing: Popcorn.Easing.Quadratic.InOut
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
@@ -559,8 +561,8 @@ define([
                 }).tween({
                     start: 62
                     ,end: 82
-                    ,from: { day: sim.daysPerYear * 3.75 }
-                    ,to: { day: sim.daysPerYear * 5.85 }
+                    ,from: { day: sim.daysPerYear * (3.75 + vernalFrac) }
+                    ,to: { day: sim.daysPerYear * (5.85 + vernalFrac) }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
                             sim.setDay( vals.day );
@@ -570,8 +572,8 @@ define([
                 }).tween({
                     start: 86
                     ,end: 93
-                    ,from: { day: sim.daysPerYear * 5.85 }
-                    ,to: { day: sim.daysPerYear * 6.15 }
+                    ,from: { day: sim.daysPerYear * (5.85 + vernalFrac) }
+                    ,to: { day: sim.daysPerYear * (6.15 + vernalFrac) }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
                             sim.setDay( vals.day );
@@ -581,8 +583,8 @@ define([
                 }).tween({
                     start: 98
                     ,end: 102
-                    ,from: { day: sim.daysPerYear * 6.15 }
-                    ,to: { day: sim.daysPerYear * 6.3 }
+                    ,from: { day: sim.daysPerYear * (6.15 + vernalFrac) }
+                    ,to: { day: sim.daysPerYear * (6.3 + vernalFrac) }
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
                             sim.setDay( vals.day );
@@ -592,8 +594,8 @@ define([
                 }).tween({
                     start: 103
                     ,end: 105
-                    ,from: { day: sim.daysPerYear * 6.3 }
-                    ,to: { day: sim.daysPerYear * 6.6 }
+                    ,from: { day: sim.daysPerYear * (6.3 + vernalFrac) }
+                    ,to: { day: sim.daysPerYear * (6.6 + vernalFrac) }
                     ,easing: Popcorn.Easing.Quadratic.InOut
                     ,onUpdate: function( vals ){
                         if ( !track.paused() ){
@@ -606,11 +608,11 @@ define([
                     ,end: 113.5
                     ,from: {
                         x: mapInitialPos
-                        ,day: sim.daysPerYear * 6.6
+                        ,day: sim.daysPerYear * (6.6 + vernalFrac)
                     }
                     ,to: {
                         x: mapInitialPos
-                        ,day: sim.daysPerYear * 6.6
+                        ,day: sim.daysPerYear * (6.6 + vernalFrac)
                     }
                     ,onStart: function( data ){
                         data.to.x = data.from.x + 0.5*self.sims.axialTiltMap.$el.width() + self.sims.axialTiltMap.sun.x() - 3;
@@ -627,11 +629,11 @@ define([
                     ,end: 116
                     ,from: {
                         x: mapInitialPos
-                        ,day: sim.daysPerYear * 6.6
+                        ,day: sim.daysPerYear * (6.6 + vernalFrac)
                     }
                     ,to: {
                         x: '+12'
-                        ,day: sim.daysPerYear * 6.6
+                        ,day: sim.daysPerYear * (6.6 + vernalFrac)
                     }
                     ,onStart: function( data ){
                         data.from.x = parseInt(self.sims.axialTiltMap.$el[0].style.backgroundPosition);
@@ -699,13 +701,12 @@ define([
 
                 var hlStep = 0;
                 var allSims = $('#axial-tilt-sim, #ecliptic-tilt-sim, .axial-tilt-col, #axial-tilt-plot');
-                var fadeAmt = 0.2;
+                var fadeAmt = 0.3;
                 track.code({
                     start: 18
                     ,end: 30
                     ,onFrame: function(){
                         if ( hlStep && hlStep !== 2 ){
-                            console.log('hlstep 2')
                             allSims.stop().fadeTo( 500, fadeAmt );
                             allSims.eq(0).andSelf(allSims.eq(1)).stop().fadeTo( 500, 1 );
                             hlStep = 2;

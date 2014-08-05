@@ -311,6 +311,7 @@ html, body, #wrap-outer {
     border: 1px solid $deep-grey-dark;
 }
 
+#eot-plot-dates,
 #axial-tilt-map-dates {
     $r: 1280/720;
     position: absolute;
@@ -379,5 +380,29 @@ html, body, #wrap-outer {
 
 #eot-plot {
     width: 1280px;
-    margin: 140px -100% 0;
+    margin: 140px -100% 0 -120%;
+}
+
+.eot-plot-wrapper {
+    position: relative;
+}
+#eot-plot-dates {
+    height: 500px;
+    top: auto;
+    left: auto;
+    right: 0;
+    bottom: 0;
+    height: 500px;
+    width: 3em;
+
+    ul {
+        height: 100%;
+    }
+
+    li {
+        display: block;
+        float: none;
+        width: auto;
+        height: (100%/12);
+    }
 }

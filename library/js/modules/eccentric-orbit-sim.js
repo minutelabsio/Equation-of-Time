@@ -17,7 +17,7 @@ define([
 
     var Pi2 = Math.PI * 2;
     var deg = 180/Math.PI;
-    var earthAbove = req.toUrl('../../images/earth-north-2-pm.png');
+    var earthAbove = req.toUrl('../../images/earth-north-3-pm.png');
 
     // Page-level Module
     var Module = M({
@@ -62,16 +62,27 @@ define([
                     x: 0
                     ,y: 0
                     ,image: imageObj
-                    ,width: dim( 2*r ) + 8
-                    ,height: dim( 2*r ) + 8
+                    ,width: dim( 2*r )
+                    ,height: dim( 2*r )
                     ,rotation: 90
                     ,offset: {
-                        x: dim( r ) + 5
-                        ,y: dim( r ) + 4
+                        x: dim( r )
+                        ,y: dim( r )
                     }
                 });
                 self.earthImg = earthImg;
                 earth.add(earthImg);
+
+                self.shadow = new Kinetic.Wedge({
+                    x: 0
+                    ,y: 0
+                    ,radius: dim( r ) - 2
+                    ,angle: 180
+                    ,fill: 'rgba(0, 0, 0, 0.3)'
+                    ,rotation: 270
+                });
+
+                earth.add( self.shadow );
 
                 self.resolve('ready');
             };
@@ -350,7 +361,6 @@ define([
             r = orbit.radius();
             orbit.offsetX( Math.cos( -angle ) * r );
             orbit.offsetY( Math.sin( -angle ) * r );
-
         }
 
         // in radians
@@ -369,6 +379,7 @@ define([
                 ,x = earth.offsetX()
                 ,y = earth.offsetY()
                 ,eot
+                ,angle
                 ;
 
             this.meanSolarNoon.rotation( -a );
@@ -376,8 +387,11 @@ define([
             x += sun.x();
             y += sun.y();
 
-            this.trueSolarNoon.rotation( Math.atan2( -y, -x ) * deg );
+            angle = Math.atan2( -y, -x );
 
+            this.trueSolarNoon.rotation( angle * deg );
+
+            this.shadow.rotation( angle * deg - 90 );
             eot = this.trueSolarNoon.rotation() % 360 - this.meanSolarNoon.rotation() % 360;
             this.eotWedge.clockwise( eot > 0 );
             this.eotWedge.angle( (-eot + 360) % 360 );
